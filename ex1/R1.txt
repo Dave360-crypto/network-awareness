@@ -1,0 +1,23 @@
+conf t
+
+int f1/0
+ip address 10.1.1.1 255.255.255.0
+no shutdown
+
+int f0/0
+ip address 10.0.1.1 255.255.255.0
+no shutdown
+
+int f0/1
+ip address 10.1.2.1 255.255.255.0
+no shutdown
+
+int lo0
+ip address 10.0.0.1 255.255.255.255
+no shutdown
+
+exit
+
+snmp-server user uDDR gDDR v3 auth md5 authpass priv aes 128 privpass
+snmp-server group gDDR v3 priv
+snmp-server community private RO
