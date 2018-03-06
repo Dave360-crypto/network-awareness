@@ -12,45 +12,16 @@
         "drawings": [],
         "links": [
             {
-                "link_id": "3f4f7c3e-c1dc-406e-9d46-ccd9920bf1f5",
+                "link_id": "0513f4ca-2f2f-4668-97f2-18d9d0678374",
                 "nodes": [
                     {
                         "adapter_number": 1,
                         "label": {
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "f1/1",
-                            "x": 53,
-                            "y": -12
-                        },
-                        "node_id": "d5dbb2fb-2b2f-4e96-8c04-edbd8b17fa9c",
-                        "port_number": 1
-                    },
-                    {
-                        "adapter_number": 0,
-                        "label": {
-                            "rotation": 0,
-                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "e0",
-                            "x": 15,
-                            "y": 50
-                        },
-                        "node_id": "24d64083-8977-4471-a6ad-1b79067da5a4",
-                        "port_number": 0
-                    }
-                ]
-            },
-            {
-                "link_id": "0c029a00-ec0c-4931-b3ca-cef3354fc342",
-                "nodes": [
-                    {
-                        "adapter_number": 0,
-                        "label": {
-                            "rotation": 0,
-                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "f0/0",
-                            "x": -4,
-                            "y": 36
+                            "text": "f1/0",
+                            "x": -31,
+                            "y": -14
                         },
                         "node_id": "4d752978-6297-4bc8-87d0-cfe796e9b51d",
                         "port_number": 0
@@ -60,11 +31,11 @@
                         "label": {
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "e0/0",
-                            "x": 69,
-                            "y": 14
+                            "text": "e0",
+                            "x": 59,
+                            "y": 47
                         },
-                        "node_id": "f445cfed-3033-4653-83b3-e3a7bcc3c6f6",
+                        "node_id": "35d7f0be-8680-4ce5-9364-7b61edd4ad10",
                         "port_number": 0
                     }
                 ]
@@ -99,16 +70,16 @@
                 ]
             },
             {
-                "link_id": "0513f4ca-2f2f-4668-97f2-18d9d0678374",
+                "link_id": "0c029a00-ec0c-4931-b3ca-cef3354fc342",
                 "nodes": [
                     {
-                        "adapter_number": 1,
+                        "adapter_number": 0,
                         "label": {
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "f1/0",
-                            "x": -31,
-                            "y": -14
+                            "text": "f0/0",
+                            "x": -4,
+                            "y": 36
                         },
                         "node_id": "4d752978-6297-4bc8-87d0-cfe796e9b51d",
                         "port_number": 0
@@ -118,11 +89,40 @@
                         "label": {
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "e0",
-                            "x": 59,
-                            "y": 47
+                            "text": "e0/0",
+                            "x": 69,
+                            "y": 14
                         },
-                        "node_id": "35d7f0be-8680-4ce5-9364-7b61edd4ad10",
+                        "node_id": "f445cfed-3033-4653-83b3-e3a7bcc3c6f6",
+                        "port_number": 0
+                    }
+                ]
+            },
+            {
+                "link_id": "3f4f7c3e-c1dc-406e-9d46-ccd9920bf1f5",
+                "nodes": [
+                    {
+                        "adapter_number": 1,
+                        "label": {
+                            "rotation": 0,
+                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                            "text": "f1/1",
+                            "x": 53,
+                            "y": -12
+                        },
+                        "node_id": "d5dbb2fb-2b2f-4e96-8c04-edbd8b17fa9c",
+                        "port_number": 1
+                    },
+                    {
+                        "adapter_number": 0,
+                        "label": {
+                            "rotation": 0,
+                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                            "text": "e0",
+                            "x": 15,
+                            "y": 50
+                        },
+                        "node_id": "24d64083-8977-4471-a6ad-1b79067da5a4",
                         "port_number": 0
                     }
                 ]
@@ -189,108 +189,6 @@
         "nodes": [
             {
                 "compute_id": "local",
-                "console": 5002,
-                "console_type": "telnet",
-                "first_port_name": "",
-                "height": 59,
-                "label": {
-                    "rotation": 0,
-                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "LabComServer",
-                    "x": -8,
-                    "y": -25
-                },
-                "name": "LabComServer",
-                "node_id": "f445cfed-3033-4653-83b3-e3a7bcc3c6f6",
-                "node_type": "virtualbox",
-                "port_name_format": "Ethernet{0}",
-                "port_segment_size": 0,
-                "properties": {
-                    "acpi_shutdown": false,
-                    "adapter_type": "Intel PRO/1000 MT Desktop (82540EM)",
-                    "adapters": 1,
-                    "headless": false,
-                    "linked_clone": false,
-                    "ram": 512,
-                    "use_any_adapter": false,
-                    "vmname": "LabComServer"
-                },
-                "symbol": ":/symbols/vbox_guest.svg",
-                "width": 65,
-                "x": -185,
-                "y": 69,
-                "z": 1
-            },
-            {
-                "compute_id": "local",
-                "console": 5001,
-                "console_type": "telnet",
-                "first_port_name": null,
-                "height": 45,
-                "label": {
-                    "rotation": 0,
-                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "R2",
-                    "x": 22,
-                    "y": -25
-                },
-                "name": "R2",
-                "node_id": "d5dbb2fb-2b2f-4e96-8c04-edbd8b17fa9c",
-                "node_type": "dynamips",
-                "port_name_format": "Ethernet{0}",
-                "port_segment_size": 0,
-                "properties": {
-                    "auto_delete_disks": true,
-                    "aux": null,
-                    "clock_divisor": 4,
-                    "disk0": 0,
-                    "disk1": 0,
-                    "dynamips_id": 2,
-                    "exec_area": 64,
-                    "idlemax": 500,
-                    "idlepc": "0x60697970",
-                    "idlesleep": 30,
-                    "image": "c7200-adventerprisek9-mz.151-4.M2.image",
-                    "image_md5sum": "d54b063e3d0b368a702ffb49f497825e",
-                    "mac_addr": "ca02.549a.0000",
-                    "midplane": "vxr",
-                    "mmap": true,
-                    "npe": "npe-400",
-                    "nvram": 512,
-                    "platform": "c7200",
-                    "power_supplies": [
-                        1,
-                        1
-                    ],
-                    "private_config": "",
-                    "private_config_content": "",
-                    "ram": 512,
-                    "sensors": [
-                        22,
-                        22,
-                        22,
-                        22
-                    ],
-                    "slot0": "C7200-IO-2FE",
-                    "slot1": "PA-2FE-TX",
-                    "slot2": null,
-                    "slot3": null,
-                    "slot4": null,
-                    "slot5": null,
-                    "slot6": null,
-                    "sparsemem": true,
-                    "startup_config": "configs/i2_startup-config.cfg",
-                    "startup_config_content": "!\n\n!\n! Last configuration change at 18:21:32 UTC Mon Feb 26 2018\nupgrade fpd auto\nversion 15.1\nservice timestamps debug datetime msec\nservice timestamps log datetime msec\nno service password-encryption\n!\nhostname R2\n!\nboot-start-marker\nboot-end-marker\n!\n!\n!\nno aaa new-model\n!\nip source-route\nno ip icmp rate-limit unreachable\nip cef\n!\n!\n!\n!\n!\nno ip domain lookup\nno ipv6 cef\n!\nmultilink bundle-name authenticated\n!\n!\n!\n!\n!\n!\n!\ncrypto pki token default removal timeout 0\n!\n!\n!\nredundancy\n!\n!\nip tcp synwait-time 5\n! \n!\n!\n!\n!\n!\n!\n!\ninterface Loopback0\n ip address 10.0.0.2 255.255.255.255\n!\ninterface FastEthernet0/0\n ip address 10.1.2.2 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet0/1\n ip address 10.0.2.2 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet1/0\n ip address 10.0.3.2 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet1/1\n ip address 10.0.4.2 255.255.255.0\n duplex auto\n speed auto\n!\nip forward-protocol nd\nno ip http server\nno ip http secure-server\n!\n!\n!\nno cdp log mismatch duplex\n!\n!\n!\n!\nsnmp-server group gDDR v3 priv \nsnmp-server community private RO\n!\n!\ncontrol-plane\n!\n!\n!\nmgcp profile default\n!\n!\n!\ngatekeeper\n shutdown\n!\n!\nline con 0\n exec-timeout 0 0\n privilege level 15\n logging synchronous\n stopbits 1\nline aux 0\n exec-timeout 0 0\n privilege level 15\n logging synchronous\n stopbits 1\nline vty 0 4\n login\n transport input all\n!\nend\n",
-                    "system_id": "FTX0945W0MY"
-                },
-                "symbol": ":/symbols/router.svg",
-                "width": 66,
-                "x": 194,
-                "y": 20,
-                "z": 1
-            },
-            {
-                "compute_id": "local",
                 "console": 5000,
                 "console_type": "telnet",
                 "first_port_name": null,
@@ -330,8 +228,8 @@
                         1,
                         1
                     ],
-                    "private_config": "",
-                    "private_config_content": "",
+                    "private_config": "/Users/Daniela/Desktop/UA/4ano/2semestre/tpr/ex1/project-files/dynamips/4d752978-6297-4bc8-87d0-cfe796e9b51d/configs/i1_private-config.cfg",
+                    "private_config_content": "\nsnmp-server user uDDR gDDR v3 encrypted auth md5 D6:C4:87:44:25:31:70:8F:DF:69:8E:00:21:4A:E1:55 priv aes 128 EF:37:2C:67:B2:3D:B2:1A:C8:00:E9:17:EA:CD:DE:BB \nend\n",
                     "ram": 512,
                     "sensors": [
                         22,
@@ -348,7 +246,7 @@
                     "slot6": null,
                     "sparsemem": true,
                     "startup_config": "configs/i1_startup-config.cfg",
-                    "startup_config_content": "!\n!\n\n!\nversion 12.4\nservice timestamps debug datetime msec\nservice timestamps log datetime msec\nno service password-encryption\n!\nhostname R1\n!\nboot-start-marker\nboot-end-marker\n!\n!\nno aaa new-model\nno ip icmp rate-limit unreachable\n!\n!\nip cef\nno ip domain lookup\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\n!\nip tcp synwait-time 5\n! \n!\n!\n!\n!\ninterface Loopback0\n ip address 10.0.0.1 255.255.255.255\n!\ninterface FastEthernet0/0\n ip address 10.0.1.1 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet0/1\n ip address 10.1.2.1 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet1/0\n ip address 10.1.1.1 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet1/1\n no ip address\n shutdown\n duplex auto\n speed auto\n!\ninterface FastEthernet2/0\n no ip address\n shutdown\n duplex auto\n speed auto\n!\ninterface FastEthernet2/1\n no ip address\n shutdown\n duplex auto\n speed auto\n!\n!\nip forward-protocol nd\n!\nno ip http server\nno ip http secure-server\n!\n!\nno cdp log mismatch duplex\n!\n!\n!\ncontrol-plane\n!\n!\n!\n!\n!\n!\ngatekeeper\n shutdown\n!\n!\nline con 0\n exec-timeout 0 0\n privilege level 15\n logging synchronous\n stopbits 1\nline aux 0\n exec-timeout 0 0\n privilege level 15\n logging synchronous\n stopbits 1\nline vty 0 4\n login\n!\n!\nend\n",
+                    "startup_config_content": "!\n\n!\n! Last configuration change at 16:40:45 UTC Mon Mar 5 2018\nupgrade fpd auto\nversion 15.1\nservice timestamps debug datetime msec\nservice timestamps log datetime msec\nno service password-encryption\n!\nhostname R1\n!\nboot-start-marker\nboot-end-marker\n!\n!\n!\nno aaa new-model\n!\nip source-route\nno ip icmp rate-limit unreachable\nip cef\n!\n!\n!\n!\n!\nno ip domain lookup\nno ipv6 cef\n!\nmultilink bundle-name authenticated\n!\n!\n!\n!\n!\n!\n!\ncrypto pki token default removal timeout 0\n!\n!\n!\nredundancy\n!\n!\nip tcp synwait-time 5\n! \n!\n!\n!\n!\n!\n!\n!\ninterface Loopback0\n ip address 10.0.0.1 255.255.255.255\n!\ninterface FastEthernet0/0\n ip address 10.0.1.1 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet0/1\n ip address 10.1.2.1 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet1/0\n ip address 10.1.1.1 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet1/1\n no ip address\n shutdown\n duplex auto\n speed auto\n!\ninterface FastEthernet2/0\n no ip address\n shutdown\n duplex auto\n speed auto\n!\ninterface FastEthernet2/1\n no ip address\n shutdown\n duplex auto\n speed auto\n!\nip forward-protocol nd\nno ip http server\nno ip http secure-server\n!\n!\n!\nno cdp log mismatch duplex\n!\n!\n!\n!\nsnmp-server group gDDR v3 priv \nsnmp-server community private RO\n!\n!\ncontrol-plane\n!\n!\n!\nmgcp profile default\n!\n!\n!\ngatekeeper\n shutdown\n!\n!\nline con 0\n exec-timeout 0 0\n privilege level 15\n logging synchronous\n stopbits 1\nline aux 0\n exec-timeout 0 0\n privilege level 15\n logging synchronous\n stopbits 1\nline vty 0 4\n login\n transport input all\n!\nend\n",
                     "system_id": "FTX0945W0MY"
                 },
                 "symbol": ":/symbols/router.svg",
@@ -366,12 +264,12 @@
                 "label": {
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "net2",
+                    "text": "net4",
                     "x": 19,
                     "y": -25
                 },
-                "name": "net2",
-                "node_id": "367d56ba-4403-4062-87cd-1d8b8c5c5064",
+                "name": "net4",
+                "node_id": "24d64083-8977-4471-a6ad-1b79067da5a4",
                 "node_type": "ethernet_switch",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -429,8 +327,152 @@
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
                 "width": 72,
-                "x": 271,
-                "y": 151,
+                "x": 275,
+                "y": -117,
+                "z": 1
+            },
+            {
+                "compute_id": "local",
+                "console": null,
+                "console_type": null,
+                "first_port_name": null,
+                "height": 32,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "net3",
+                    "x": 19,
+                    "y": -25
+                },
+                "name": "net3",
+                "node_id": "6c5955d7-49bd-47f3-aa54-6ea0101b0ba0",
+                "node_type": "ethernet_switch",
+                "port_name_format": "Ethernet{0}",
+                "port_segment_size": 0,
+                "properties": {
+                    "ports_mapping": [
+                        {
+                            "name": "Ethernet0",
+                            "port_number": 0,
+                            "type": "access",
+                            "vlan": 1
+                        },
+                        {
+                            "name": "Ethernet1",
+                            "port_number": 1,
+                            "type": "access",
+                            "vlan": 1
+                        },
+                        {
+                            "name": "Ethernet2",
+                            "port_number": 2,
+                            "type": "access",
+                            "vlan": 1
+                        },
+                        {
+                            "name": "Ethernet3",
+                            "port_number": 3,
+                            "type": "access",
+                            "vlan": 1
+                        },
+                        {
+                            "name": "Ethernet4",
+                            "port_number": 4,
+                            "type": "access",
+                            "vlan": 1
+                        },
+                        {
+                            "name": "Ethernet5",
+                            "port_number": 5,
+                            "type": "access",
+                            "vlan": 1
+                        },
+                        {
+                            "name": "Ethernet6",
+                            "port_number": 6,
+                            "type": "access",
+                            "vlan": 1
+                        },
+                        {
+                            "name": "Ethernet7",
+                            "port_number": 7,
+                            "type": "access",
+                            "vlan": 1
+                        }
+                    ]
+                },
+                "symbol": ":/symbols/ethernet_switch.svg",
+                "width": 72,
+                "x": 355,
+                "y": 20,
+                "z": 1
+            },
+            {
+                "compute_id": "local",
+                "console": 5001,
+                "console_type": "telnet",
+                "first_port_name": null,
+                "height": 45,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "R2",
+                    "x": 22,
+                    "y": -25
+                },
+                "name": "R2",
+                "node_id": "d5dbb2fb-2b2f-4e96-8c04-edbd8b17fa9c",
+                "node_type": "dynamips",
+                "port_name_format": "Ethernet{0}",
+                "port_segment_size": 0,
+                "properties": {
+                    "auto_delete_disks": true,
+                    "aux": null,
+                    "clock_divisor": 4,
+                    "disk0": 0,
+                    "disk1": 0,
+                    "dynamips_id": 2,
+                    "exec_area": 64,
+                    "idlemax": 500,
+                    "idlepc": "0x60697970",
+                    "idlesleep": 30,
+                    "image": "c7200-adventerprisek9-mz.151-4.M2.image",
+                    "image_md5sum": "d54b063e3d0b368a702ffb49f497825e",
+                    "mac_addr": "ca02.549a.0000",
+                    "midplane": "vxr",
+                    "mmap": true,
+                    "npe": "npe-400",
+                    "nvram": 512,
+                    "platform": "c7200",
+                    "power_supplies": [
+                        1,
+                        1
+                    ],
+                    "private_config": "/Users/Daniela/Desktop/UA/4ano/2semestre/tpr/ex1/project-files/dynamips/d5dbb2fb-2b2f-4e96-8c04-edbd8b17fa9c/configs/i2_private-config.cfg",
+                    "private_config_content": "\nsnmp-server user uDDR gDDR v3 encrypted auth md5 AE:56:11:DB:F4:85:E2:9C:BD:E4:E3:43:5D:B7:5D:02 priv aes 128 FE:85:AC:4B:20:13:23:E1:51:71:50:2E:FA:F6:82:A2 \nend\n",
+                    "ram": 512,
+                    "sensors": [
+                        22,
+                        22,
+                        22,
+                        22
+                    ],
+                    "slot0": "C7200-IO-2FE",
+                    "slot1": "PA-2FE-TX",
+                    "slot2": null,
+                    "slot3": null,
+                    "slot4": null,
+                    "slot5": null,
+                    "slot6": null,
+                    "sparsemem": true,
+                    "startup_config": "configs/i2_startup-config.cfg",
+                    "startup_config_content": "!\n\n!\n! Last configuration change at 16:40:57 UTC Mon Mar 5 2018\nupgrade fpd auto\nversion 15.1\nservice timestamps debug datetime msec\nservice timestamps log datetime msec\nno service password-encryption\n!\nhostname R2\n!\nboot-start-marker\nboot-end-marker\n!\n!\n!\nno aaa new-model\n!\nip source-route\nno ip icmp rate-limit unreachable\nip cef\n!\n!\n!\n!\n!\nno ip domain lookup\nno ipv6 cef\n!\nmultilink bundle-name authenticated\n!\n!\n!\n!\n!\n!\n!\ncrypto pki token default removal timeout 0\n!\n!\n!\nredundancy\n!\n!\nip tcp synwait-time 5\n! \n!\n!\n!\n!\n!\n!\n!\ninterface Loopback0\n ip address 10.0.0.2 255.255.255.255\n!\ninterface FastEthernet0/0\n ip address 10.1.2.2 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet0/1\n ip address 10.0.2.2 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet1/0\n ip address 10.0.3.2 255.255.255.0\n duplex auto\n speed auto\n!\ninterface FastEthernet1/1\n ip address 10.0.4.2 255.255.255.0\n duplex auto\n speed auto\n!\nip forward-protocol nd\nno ip http server\nno ip http secure-server\n!\n!\n!\nno cdp log mismatch duplex\n!\n!\n!\n!\nsnmp-server group gDDR v3 priv \nsnmp-server community private RO\n!\n!\ncontrol-plane\n!\n!\n!\nmgcp profile default\n!\n!\n!\ngatekeeper\n shutdown\n!\n!\nline con 0\n exec-timeout 0 0\n privilege level 15\n logging synchronous\n stopbits 1\nline aux 0\n exec-timeout 0 0\n privilege level 15\n logging synchronous\n stopbits 1\nline vty 0 4\n login\n transport input all\n!\nend\n",
+                    "system_id": "FTX0945W0MY"
+                },
+                "symbol": ":/symbols/router.svg",
+                "width": 66,
+                "x": 194,
+                "y": 20,
                 "z": 1
             },
             {
@@ -518,12 +560,12 @@
                 "label": {
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "net3",
+                    "text": "net2",
                     "x": 19,
                     "y": -25
                 },
-                "name": "net3",
-                "node_id": "6c5955d7-49bd-47f3-aa54-6ea0101b0ba0",
+                "name": "net2",
+                "node_id": "367d56ba-4403-4062-87cd-1d8b8c5c5064",
                 "node_type": "ethernet_switch",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -581,84 +623,42 @@
                 },
                 "symbol": ":/symbols/ethernet_switch.svg",
                 "width": 72,
-                "x": 355,
-                "y": 20,
+                "x": 271,
+                "y": 151,
                 "z": 1
             },
             {
                 "compute_id": "local",
-                "console": null,
-                "console_type": null,
-                "first_port_name": null,
-                "height": 32,
+                "console": 5002,
+                "console_type": "telnet",
+                "first_port_name": "",
+                "height": 59,
                 "label": {
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "net4",
-                    "x": 19,
+                    "text": "LabComServer",
+                    "x": -8,
                     "y": -25
                 },
-                "name": "net4",
-                "node_id": "24d64083-8977-4471-a6ad-1b79067da5a4",
-                "node_type": "ethernet_switch",
+                "name": "LabComServer",
+                "node_id": "f445cfed-3033-4653-83b3-e3a7bcc3c6f6",
+                "node_type": "virtualbox",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
                 "properties": {
-                    "ports_mapping": [
-                        {
-                            "name": "Ethernet0",
-                            "port_number": 0,
-                            "type": "access",
-                            "vlan": 1
-                        },
-                        {
-                            "name": "Ethernet1",
-                            "port_number": 1,
-                            "type": "access",
-                            "vlan": 1
-                        },
-                        {
-                            "name": "Ethernet2",
-                            "port_number": 2,
-                            "type": "access",
-                            "vlan": 1
-                        },
-                        {
-                            "name": "Ethernet3",
-                            "port_number": 3,
-                            "type": "access",
-                            "vlan": 1
-                        },
-                        {
-                            "name": "Ethernet4",
-                            "port_number": 4,
-                            "type": "access",
-                            "vlan": 1
-                        },
-                        {
-                            "name": "Ethernet5",
-                            "port_number": 5,
-                            "type": "access",
-                            "vlan": 1
-                        },
-                        {
-                            "name": "Ethernet6",
-                            "port_number": 6,
-                            "type": "access",
-                            "vlan": 1
-                        },
-                        {
-                            "name": "Ethernet7",
-                            "port_number": 7,
-                            "type": "access",
-                            "vlan": 1
-                        }
-                    ]
+                    "acpi_shutdown": false,
+                    "adapter_type": "Intel PRO/1000 MT Desktop (82540EM)",
+                    "adapters": 1,
+                    "headless": false,
+                    "linked_clone": false,
+                    "ram": 512,
+                    "use_any_adapter": false,
+                    "vmname": "LabComServer"
                 },
-                "symbol": ":/symbols/ethernet_switch.svg",
-                "width": 72,
-                "x": 275,
-                "y": -117,
+                "symbol": ":/symbols/vbox_guest.svg",
+                "width": 65,
+                "x": -185,
+                "y": 69,
                 "z": 1
             }
         ]
