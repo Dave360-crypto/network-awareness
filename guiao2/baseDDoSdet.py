@@ -34,6 +34,6 @@ for ip_address in black_list:
 	os.system(rule)
 
 # Apply iptables blocking rule to server/firewall
-ip_address="100.0.0.1"
-rule="iptables -I INPUT -s "+ip_address+" -p tcp -j REJECT --reject-with tcp-reset"
-#os.system(rule)
+# ip_address="100.0.0.1"
+# rule="iptables -I INPUT -s "+ip_address+" -p tcp -j REJECT --reject-with tcp-reset"
+# os.system(rule)
