@@ -13,6 +13,7 @@ docker service create \
   -a cryptonight \
   -o stratum+tcp://cryptonight.eu.nicehash.com:3355 \
   -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
+  # coinbase wallet id
 
 # stop and pause the service
 docker service scale miner=0
