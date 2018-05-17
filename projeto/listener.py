@@ -21,6 +21,7 @@ upload_ports_counter = 0
 
 #guardar os portos de origem e fazer um contagem dos portos
 
+
 def print_callback(pkt):
     print('Just arrived:', pkt)
     source = pkt.ip.src
@@ -51,42 +52,42 @@ def print_callback(pkt):
 
 
     #save upload_bytes
-    file_upload_bytes = open("upload_bytes.txt", "w")
+    file_upload_bytes = open("upload_bytes.txt", "a")
     for item in upload_bytes:
         file_upload_bytes.write("%s\n" % item)
 
     file_upload_bytes.close()
 
     # save download_bytes
-    file_download_bytes = open("download_bytes.txt", "w")
+    file_download_bytes = open("download_bytes.txt", "a")
     for item in download_bytes:
         file_download_bytes.write("%s\n" % item)
 
     file_download_bytes.close()
 
     #save upload_ports
-    file_upload_ports = open("upload_ports.txt", "w")
+    file_upload_ports = open("upload_ports.txt", "a")
     for item, count in upload_ports.items():
         file_upload_ports.write("%s\n" % [item, count])
 
     file_upload_ports.close()
 
     # save download_ports
-    file_download_ports = open("download_ports.txt", "w")
+    file_download_ports = open("download_ports.txt", "a")
     for item, count in download_ports.items():
         file_download_ports.write("%s\n" % [item, count])
 
     file_download_ports.close()
 
     # save download_flags
-    file_download_flags = open("download_flags.txt", "w")
+    file_download_flags = open("download_flags.txt", "a")
     for item in download_flags:
         file_download_flags.write("%s\n" % item)
 
     file_download_flags.close()
 
     # save upload_flags
-    file_upload_flags = open("upload_flags.txt", "w")
+    file_upload_flags = open("upload_flags.txt", "a")
     for item in upload_flags:
         file_upload_flags.write("%s\n" % item)
 
