@@ -36,13 +36,12 @@ except KeyboardInterrupt:
     last_timestamp = 0
 
     for index, pkt in packets.items():
-        print(pkt)
         if index == 0:
             source = pkt.ip.src
 
             if source == socket.gethostbyname(socket.gethostname()):
                 upload_counter += 1
-                upload_bytes_counter += pkt.length
+                upload_bytes_counter += int(pkt.length)
                 # contar os portos de origem
                 if pkt.tcp.srcport in upload_ports:
                     upload_ports[pkt.tcp.srcport] += 1
@@ -51,14 +50,14 @@ except KeyboardInterrupt:
 
             else:
                 download_counter += 1
-                download_bytes_counter += pkt.length
+                download_bytes_counter += int(pkt.length)
                 # contar os portos de origem
                 if pkt.tcp.srcport in download_ports:
                     download_ports[pkt.tcp.srcport] += 1
                 else:
                     download_ports[pkt.tcp.srcport] = 1
 
-            last_timestamp = datetime.datetime.utcfromtimestamp(packets[index].sniff_time)
+            last_timestamp = packets[index].sniff_time
             continue
 
         delta_time = (datetime.datetime.utcfromtimestamp(packets[index].sniff_time) - last_timestamp).total_seconds()
