@@ -27,8 +27,9 @@ index = 0
 
 
 def print_callback(pkt):
-    packets[++index] = pkt
-
+    global index
+    packets[index] = pkt
+    index += 1
 
 try:
     capture.apply_on_packets(print_callback)
@@ -36,9 +37,8 @@ except KeyboardInterrupt:
     last_timestamp = 0
 
     for index, pkt in packets.items():
-        if index == 0:
-            source = pkt.ip.src
-
+        source = pkt.ip.src
+        if index==0:
             if source == socket.gethostbyname(socket.gethostname()):
                 upload_counter += 1
                 upload_bytes_counter += int(pkt.length)
@@ -60,14 +60,17 @@ except KeyboardInterrupt:
             last_timestamp = packets[index].sniff_time
             continue
 
-        delta_time = (datetime.datetime.utcfromtimestamp(packets[index].sniff_time) - last_timestamp).total_seconds()
-        print(delta_time)
+        timestamp_now = packets[index].sniff_time
+        timestamp_now = timestamp_now.replace(tzinfo=datetime.timezone.utc).timestamp()
+
+        delta_time = ((datetime.datetime.utcfromtimestamp(int(timestamp_now))) - last_timestamp).total_seconds()
+        print("AQUIII", delta_time)
 
         if delta_time >= 1: # if passed more than one second, means we have to write n 0
             upload_bytes.append(upload_bytes_counter)
             download_bytes.append(download_bytes_counter)
 
-            for i in range(0, delta_time-1):
+            for i in range(0, int(delta_time)-1):
                 upload_bytes.append(0)
                 download_bytes.append(0)
 
@@ -94,8 +97,10 @@ except KeyboardInterrupt:
                 else:
                     download_ports[pkt.tcp.srcport] = 1
 
-        last_timestamp = datetime.datetime.utcfromtimestamp(packets[index].sniff_time)
+        last_timestamp = packets[index].sniff_time
+        print(last_timestamp)
 
+    print(upload_bytes)
 
     # save upload_bytes
     file_upload_bytes = open("upload_bytes.txt", "a")
