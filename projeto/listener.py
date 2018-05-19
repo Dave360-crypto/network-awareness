@@ -48,6 +48,8 @@ except KeyboardInterrupt:
                 else:
                     upload_ports[pkt.tcp.srcport] = 1
 
+                upload_flags.append(pkt.tcp.flags)
+
             else:
                 download_counter += 1
                 download_bytes_counter += int(pkt.length)
@@ -56,6 +58,8 @@ except KeyboardInterrupt:
                     download_ports[pkt.tcp.srcport] += 1
                 else:
                     download_ports[pkt.tcp.srcport] = 1
+
+                download_flags.append(pkt.tcp.flags)
 
             last_timestamp = packets[index].sniff_time
             continue
@@ -88,6 +92,8 @@ except KeyboardInterrupt:
                 else:
                     upload_ports[pkt.tcp.srcport] = 1
 
+                upload_flags.append(pkt.tcp.flags)
+
             else:
                 download_counter += 1
                 download_bytes_counter += pkt.length
@@ -96,6 +102,8 @@ except KeyboardInterrupt:
                     download_ports[pkt.tcp.srcport] += 1
                 else:
                     download_ports[pkt.tcp.srcport] = 1
+
+                download_flags.append(pkt.tcp.flags)
 
         last_timestamp = packets[index].sniff_time
         print(last_timestamp)
