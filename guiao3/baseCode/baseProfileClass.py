@@ -38,6 +38,8 @@ def plot3Classes(data1, name1, data2, name2, data3, name3):
 
 ## -- 2 -- ##
 def breakTrainTest(data, oWnd=300, trainPerc=0.5):
+    print("AQUI")
+    print(data)
     nSamp, nCols = data.shape
     nObs = int(nSamp / oWnd)
     data_obs = data.reshape((nObs, oWnd, nCols))
