@@ -68,9 +68,10 @@ except KeyboardInterrupt:
         timestamp_now = timestamp_now.replace(tzinfo=datetime.timezone.utc).timestamp()
 
         delta_time = ((datetime.datetime.utcfromtimestamp(int(timestamp_now))) - last_timestamp).total_seconds()
-        print("AQUIII", delta_time)
+        #print("AQUIII", delta_time)
 
         if delta_time >= 1: # if passed more than one second, means we have to write n 0
+            #print("AQUIII", delta_time)
             upload_bytes.append(upload_bytes_counter)
             download_bytes.append(download_bytes_counter)
 
@@ -80,12 +81,12 @@ except KeyboardInterrupt:
 
             upload_bytes_counter = 0
             download_bytes_counter = 0
-        elif packets[index].sniff_time == packets[index-1].sniff_time: # if it's the same timestamp, we have to increment
+        elif int(last_timestamp.replace(tzinfo=datetime.timezone.utc).timestamp()) == int(timestamp_now): # if it's the same timestamp, we have to increment
             source = pkt.ip.src
 
             if source == socket.gethostbyname(socket.gethostname()):
                 upload_counter += 1
-                upload_bytes_counter += pkt.length
+                upload_bytes_counter += int(pkt.length)
                 # contar os portos de origem
                 if pkt.tcp.srcport in upload_ports:
                     upload_ports[pkt.tcp.srcport] += 1
@@ -96,7 +97,7 @@ except KeyboardInterrupt:
 
             else:
                 download_counter += 1
-                download_bytes_counter += pkt.length
+                download_bytes_counter += int(pkt.length)
                 # contar os portos de origem
                 if pkt.tcp.srcport in download_ports:
                     download_ports[pkt.tcp.srcport] += 1
@@ -106,9 +107,6 @@ except KeyboardInterrupt:
                 download_flags.append(pkt.tcp.flags)
 
         last_timestamp = packets[index].sniff_time
-        print(last_timestamp)
-
-    print(upload_bytes)
 
     # save upload_bytes
     file_upload_bytes = open("upload_bytes.txt", "a")
