@@ -38,34 +38,31 @@ def plot3Classes(data1, name1, data2, name2, data3, name3):
 
 ## -- 2 -- ##
 def breakTrainTest(data, oWnd=300, trainPerc=0.5):
+
+    """
+    removing zeros
+    """
+    data_without_zeros = data.copy()
+    n_deletes = 0
+
+    for i in range(0, len(data)):
+        if np.mean(data[i]) == 0:
+            data_without_zeros = np.delete(data_without_zeros, i-n_deletes, 0)
+            n_deletes += 1
+
     nSamp, nCols = data.shape
     nObs = int(nSamp / oWnd)
-    data_obs = data.reshape((nObs, oWnd, nCols))
-    data_train = 0
-    data_test = 0
-    data_withoutzeros = []
-    for i in range(0,nObs):
-        mean = np.mean(data_obs[i,:,:],axis=0)
-        if mean[0] == 0 and mean[1]==0:
-            pass
-        else:
-            data_withoutzeros.append(data_obs[i,:,:])
-            order = np.random.permutation(nObs)
-            order = np.arange(nObs)  # Comment out to random split
+    data_obs = data[:nObs * oWnd, :].reshape((nObs, oWnd, nCols))
 
-            nTrain = int(nObs * trainPerc)
+    order = np.random.permutation(nObs)
+    order = np.arange(nObs)  # Comment out to random split
 
-            data_withoutzeros = np.array([data_withoutzeros])
-            data_withoutzeros = data_withoutzeros.reshape((20, 15, nCols))
+    nTrain = int(nObs * trainPerc)
 
-            print(data_obs)
-            print(data_withoutzeros)
-
-            data_train = data_withoutzeros[order[:nTrain], :, :]
-            data_test = data_withoutzeros[order[nTrain:], :, :]
+    data_train = data_obs[order[:nTrain], :, :]
+    data_test = data_obs[order[nTrain:], :, :]
 
     return (data_train, data_test)
-
 
 
 ## -- 3 -- ##
@@ -174,7 +171,7 @@ nfig = 1
 ## -- 1 -- ##
 yt = np.loadtxt('../dataFiles/YouTube.dat')
 browsing = np.loadtxt('../dataFiles/Browsing.dat')
-mining = np.loadtxt('download_upload_bytes.dat')
+mining = np.loadtxt('mining_download_upload_bytes.dat')
 
 plt.figure(1)
 plot3Classes(yt, 'YouTube', browsing, 'Browsing', mining, 'Mining')
