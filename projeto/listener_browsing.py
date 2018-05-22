@@ -93,28 +93,28 @@ except KeyboardInterrupt:
         last_timestamp = packets[index].sniff_time
 
     # save upload_bytes
-    file_upload_bytes = open("browsing_upload_bytes.txt", "w")
+    file_upload_bytes = open("browsing_upload_bytes.txt", "a")
     for item in upload_bytes:
         file_upload_bytes.write("%s\n" % item)
 
     file_upload_bytes.close()
 
     # save download_bytes
-    file_download_bytes = open("browsing_download_bytes.txt", "w")
+    file_download_bytes = open("browsing_download_bytes.txt", "a")
     for item in download_bytes:
         file_download_bytes.write("%s\n" % item)
 
     file_download_bytes.close()
 
     # save upload_ports
-    file_upload_ports = open("browsing_upload_ports.txt", "w")
+    file_upload_ports = open("browsing_upload_ports.txt", "a")
     for item, count in upload_ports.items():
         file_upload_ports.write("%s\n" % [item, count])
 
     file_upload_ports.close()
 
     # save download_ports
-    file_download_ports = open("browsing_download_ports.txt", "w")
+    file_download_ports = open("browsing_download_ports.txt", "a")
     for item, count in download_ports.items():
         file_download_ports.write("%s\n" % [item, count])
 
