@@ -42,7 +42,7 @@ def breakTrainTest(data, oWnd=300, trainPerc=0.5):
     print(data)
     nSamp, nCols = data.shape
     nObs = int(nSamp / oWnd)
-    data_obs = data.reshape((nObs, oWnd, nCols))
+    data_obs = data[:nObs*oWnd,:].reshape((nObs, oWnd, nCols))
 
     order = np.random.permutation(nObs)
     order = np.arange(nObs)  # Comment out to random split

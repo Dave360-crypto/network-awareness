@@ -41,16 +41,31 @@ def breakTrainTest(data, oWnd=300, trainPerc=0.5):
     nSamp, nCols = data.shape
     nObs = int(nSamp / oWnd)
     data_obs = data.reshape((nObs, oWnd, nCols))
+    data_train = 0
+    data_test = 0
+    data_withoutzeros = []
+    for i in range(0,nObs):
+        mean = np.mean(data_obs[i,:,:],axis=0)
+        if mean[0] == 0 and mean[1]==0:
+            pass
+        else:
+            data_withoutzeros.append(data_obs[i,:,:])
+            order = np.random.permutation(nObs)
+            order = np.arange(nObs)  # Comment out to random split
 
-    order = np.random.permutation(nObs)
-    order = np.arange(nObs)  # Comment out to random split
+            nTrain = int(nObs * trainPerc)
 
-    nTrain = int(nObs * trainPerc)
+            data_withoutzeros = np.array([data_withoutzeros])
+            data_withoutzeros = data_withoutzeros.reshape((20, 15, nCols))
 
-    data_train = data_obs[order[:nTrain], :, :]
-    data_test = data_obs[order[nTrain:], :, :]
+            print(data_obs)
+            print(data_withoutzeros)
+
+            data_train = data_withoutzeros[order[:nTrain], :, :]
+            data_test = data_withoutzeros[order[nTrain:], :, :]
 
     return (data_train, data_test)
+
 
 
 ## -- 3 -- ##
@@ -118,7 +133,10 @@ def extractFeaturesSilence(data, Class=0):
         silence_features = np.array([])
         for c in range(nCols):
             silence = extratctSilence(data[i, :, c], threshold=0)
-            silence_features = np.append(silence_features, [np.mean(silence), np.var(silence)])
+            if len(silence) > 0:
+                silence_features = np.append(silence_features, [np.mean(silence), np.var(silence)])
+            else:
+                silence_features = np.append(silence_features, [0, 0])
 
         features.append(silence_features)
 
@@ -134,7 +152,8 @@ def extractFeaturesWavelet(data, scales=[2, 4, 8, 16, 32], Class=0):
     for i in range(nObs):
         scalo_features = np.array([])
         for c in range(nCols):
-            scalo, scales = scalogram.scalogramCWT(data[i, :, c], scales)
+            # fixed scales->fscales
+            scalo, fscales = scalogram.scalogramCWT(data[i, :, c], scales)
             scalo_features = np.append(scalo_features, scalo)
 
         features.append(scalo_features)
@@ -216,7 +235,7 @@ plotFeatures(featuresS, oClass, 0, 2)
 ## -- 6 -- ##
 import scalogram
 
-scales = range(2, 256)
+scales = range(2, 128)
 plt.figure(6)
 
 i = 0
