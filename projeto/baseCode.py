@@ -188,6 +188,7 @@ yt_train, yt_test = breakTrainTest(yt)
 browsing_train, browsing_test = breakTrainTest(browsing)
 mining_train, mining_test = breakTrainTest(mining)
 
+"""
 val = min(len(yt_train), len(yt_test), len(browsing_train), len(browsing_test), len(mining_test), len(mining_train))
 
 yt_train = yt_train[:val]
@@ -196,6 +197,7 @@ browsing_train = browsing_train[:val]
 browsing_test = browsing_test[:val]
 mining_train = mining_train[:val]
 mining_test = mining_test[:val]
+"""
 
 plt.figure(2)
 """
