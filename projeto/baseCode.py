@@ -40,22 +40,22 @@ def plot3Classes(data1, name1, data2, name2, data3, name3):
 def breakTrainTest(data, oWnd=300, trainPerc=0.5):
     nSamp, nCols = data.shape
     nObs = int(nSamp / oWnd)
-    data_obs = data.reshape((nObs, oWnd, nCols))
+    data_obs = data[:nObs*oWnd].reshape((nObs, oWnd, nCols))
+
 
     data_withoutzeros = []
+
     for i in range(0, nObs):
         mean = np.mean(data_obs[i, :, :], axis=0)
         if mean[0] == 0 and mean[1] == 0:
             pass
         else:
-            data_withoutzeros= np.append(data_withoutzeros, data_obs[i, :, :])
+            data_withoutzeros.append(data_obs[i, :, :])
 
+    data_withoutzeros = np.array(data_withoutzeros)
 
-    #nCols = data_withoutzeros.shape
-    #nObs = int(nSamp / oWnd)
-
-    #print(nCols)
-
+    nSamp, oWnd, nCols = data_withoutzeros.shape
+    nObs = int(nSamp / oWnd)
 
     order = np.random.permutation(nObs)
     order = np.arange(nObs)  # Comment out to random split
@@ -63,10 +63,12 @@ def breakTrainTest(data, oWnd=300, trainPerc=0.5):
     nTrain = int(nObs * trainPerc)
 
     data_withoutzeros = np.array([data_withoutzeros])
-    data_withoutzeros = data_withoutzeros.reshape((nObs, oWnd, nCols))
+    data_withoutzeros = data_withoutzeros[:nObs*oWnd].reshape((nObs, oWnd, nCols))
 
     data_train = data_withoutzeros[order[:nTrain], :, :]
     data_test = data_withoutzeros[order[nTrain:], :, :]
+
+    print(data_train)
 
     return (data_train, data_test)
 
@@ -177,10 +179,10 @@ nfig = 1
 ## -- 1 -- ##
 yt = np.loadtxt('../dataFiles/YouTube.dat')
 browsing = np.loadtxt('../dataFiles/Browsing.dat')
-mining = np.loadtxt('download_upload_bytes.dat')
+mining = np.loadtxt('mining_download_upload_bytes.dat')
 
-plt.figure(1)
-plot3Classes(yt, 'YouTube', browsing, 'Browsing', mining, 'Mining')
+#plt.figure(1)
+#plot3Classes(yt, 'YouTube', browsing, 'Browsing', mining, 'Mining')
 
 ## -- 2 -- ##
 yt_train, yt_test = breakTrainTest(yt)
@@ -188,6 +190,9 @@ browsing_train, browsing_test = breakTrainTest(browsing)
 mining_train, mining_test = breakTrainTest(mining)
 
 plt.figure(2)
+"""
+This section will plot upload and download values of each component (mining, youtube and browsing)
+"""
 plt.subplot(3, 1, 1)
 for i in range(10):
     plt.plot(yt_train[i, :, 0], 'b')
