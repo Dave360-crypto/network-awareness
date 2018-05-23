@@ -54,21 +54,18 @@ def breakTrainTest(data, oWnd=300, trainPerc=0.5):
 
     data_withoutzeros = np.array(data_withoutzeros)
 
-    nSamp, oWnd, nCols = data_withoutzeros.shape
-    nObs = int(nSamp / oWnd)
+    nObs, oWnd, nCols = data_withoutzeros.shape
 
     order = np.random.permutation(nObs)
     order = np.arange(nObs)  # Comment out to random split
 
     nTrain = int(nObs * trainPerc)
 
-    data_withoutzeros = np.array([data_withoutzeros])
     data_withoutzeros = data_withoutzeros[:nObs*oWnd].reshape((nObs, oWnd, nCols))
 
     data_train = data_withoutzeros[order[:nTrain], :, :]
     data_test = data_withoutzeros[order[nTrain:], :, :]
 
-    print(data_train)
 
     return (data_train, data_test)
 
@@ -181,32 +178,43 @@ yt = np.loadtxt('../dataFiles/YouTube.dat')
 browsing = np.loadtxt('../dataFiles/Browsing.dat')
 mining = np.loadtxt('mining_download_upload_bytes.dat')
 
-#plt.figure(1)
-#plot3Classes(yt, 'YouTube', browsing, 'Browsing', mining, 'Mining')
+plt.figure(1)
+plot3Classes(yt, 'YouTube', browsing, 'Browsing', mining, 'Mining')
 
 ## -- 2 -- ##
+
+
 yt_train, yt_test = breakTrainTest(yt)
 browsing_train, browsing_test = breakTrainTest(browsing)
 mining_train, mining_test = breakTrainTest(mining)
+
+val = min(len(yt_train), len(yt_test), len(browsing_train), len(browsing_test), len(mining_test), len(mining_train))
+
+yt_train = yt_train[:val]
+yt_test = yt_test[:val]
+browsing_train = browsing_train[:val]
+browsing_test = browsing_test[:val]
+mining_train = mining_train[:val]
+mining_test = mining_test[:val]
 
 plt.figure(2)
 """
 This section will plot upload and download values of each component (mining, youtube and browsing)
 """
 plt.subplot(3, 1, 1)
-for i in range(10):
+for i in range(len(yt_train)):
     plt.plot(yt_train[i, :, 0], 'b')
     plt.plot(yt_train[i, :, 1], 'g')
 plt.title('YouTube')
 plt.ylabel('Bytes/sec')
 plt.subplot(3, 1, 2)
-for i in range(10):
+for i in range(len(browsing_train)):
     plt.plot(browsing_train[i, :, 0], 'b')
     plt.plot(browsing_train[i, :, 1], 'g')
 plt.title('Browsing')
 plt.ylabel('Bytes/sec')
 plt.subplot(3, 1, 3)
-for i in range(10):
+for i in range(len(mining_train)):
     plt.plot(mining_train[i, :, 0], 'b')
     plt.plot(mining_train[i, :, 1], 'g')
 plt.title('Mining')
