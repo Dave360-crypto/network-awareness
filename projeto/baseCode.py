@@ -41,8 +41,7 @@ def breakTrainTest(data, oWnd=300, trainPerc=0.5):
     nSamp, nCols = data.shape
     nObs = int(nSamp / oWnd)
     data_obs = data.reshape((nObs, oWnd, nCols))
-    data_train = 0
-    data_test = 0
+
     data_withoutzeros = []
     for i in range(0, nObs):
         mean = np.mean(data_obs[i, :, :], axis=0)
@@ -51,19 +50,23 @@ def breakTrainTest(data, oWnd=300, trainPerc=0.5):
         else:
             data_withoutzeros= np.append(data_withoutzeros, data_obs[i, :, :])
 
-            order = np.random.permutation(nObs)
-            order = np.arange(nObs)  # Comment out to random split
 
-            nTrain = int(nObs * trainPerc)
+    #nCols = data_withoutzeros.shape
+    #nObs = int(nSamp / oWnd)
 
-            data_withoutzeros = np.array([data_withoutzeros])
-            data_withoutzeros = data_withoutzeros.reshape((20, 15, nCols))
+    #print(nCols)
 
-            print(data_obs)
-            print(data_withoutzeros)
 
-            data_train = data_withoutzeros[order[:nTrain], :, :]
-            data_test = data_withoutzeros[order[nTrain:], :, :]
+    order = np.random.permutation(nObs)
+    order = np.arange(nObs)  # Comment out to random split
+
+    nTrain = int(nObs * trainPerc)
+
+    data_withoutzeros = np.array([data_withoutzeros])
+    data_withoutzeros = data_withoutzeros.reshape((nObs, oWnd, nCols))
+
+    data_train = data_withoutzeros[order[:nTrain], :, :]
+    data_test = data_withoutzeros[order[nTrain:], :, :]
 
     return (data_train, data_test)
 
@@ -174,7 +177,7 @@ nfig = 1
 ## -- 1 -- ##
 yt = np.loadtxt('../dataFiles/YouTube.dat')
 browsing = np.loadtxt('../dataFiles/Browsing.dat')
-mining = np.loadtxt('mining_download_upload_bytes.dat')
+mining = np.loadtxt('download_upload_bytes.dat')
 
 plt.figure(1)
 plot3Classes(yt, 'YouTube', browsing, 'Browsing', mining, 'Mining')
