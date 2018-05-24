@@ -53,10 +53,10 @@ for i in range(0, size_bytes):
 """
 Bytes: download upload
 """
-download_bytes = open("youtube_download_bytes.txt", "r")
-upload_bytes = open("youtube_upload_bytes.txt", "r")
+download_bytes = open("../data/youtube_download_bytes.txt", "r")
+upload_bytes = open("../data/youtube_upload_bytes.txt", "r")
 
-download_upload_bytes = open("youtube_download_upload_bytes.dat", "w")
+download_upload_bytes = open("../data/youtube_download_upload_bytes.dat", "w")
 
 lines_download = download_bytes.readlines()
 lines_upload = upload_bytes.readlines()
@@ -73,8 +73,8 @@ for i in range(0, size_bytes):
 Ports: download upload
 """
 
-download_ports = open("youtube_download_ports.txt", "r")
-upload_ports = open("youtube_upload_ports.txt", "r")
+download_ports = open("../data/youtube_download_ports.txt", "r")
+upload_ports = open("../data/youtube_upload_ports.txt", "r")
 
 download_upload_ports = open("youtube_download_upload_ports.dat", "w")
 
@@ -100,10 +100,10 @@ for i in range(0, size_bytes):
 """
 Bytes: download upload
 """
-download_bytes = open("browsing_download_bytes.txt", "r")
-upload_bytes = open("browsing_upload_bytes.txt", "r")
+download_bytes = open("../data/browsing_download_bytes.txt", "r")
+upload_bytes = open("../data/browsing_upload_bytes.txt", "r")
 
-download_upload_bytes = open("browsing_download_upload_bytes.dat", "w")
+download_upload_bytes = open("../data/browsing_download_upload_bytes.dat", "w")
 
 lines_download = download_bytes.readlines()
 lines_upload = upload_bytes.readlines()
@@ -120,10 +120,10 @@ for i in range(0, size_bytes):
 Ports: download upload
 """
 
-download_ports = open("browsing_download_ports.txt", "r")
-upload_ports = open("browsing_upload_ports.txt", "r")
+download_ports = open("../data/browsing_download_ports.txt", "r")
+upload_ports = open("../data/browsing_upload_ports.txt", "r")
 
-download_upload_ports = open("browsig_download_upload_ports.dat", "w")
+download_upload_ports = open("../data/browsig_download_upload_ports.dat", "w")
 
 lines_download = download_ports.readlines()
 lines_upload = upload_ports.readlines()
