@@ -157,9 +157,9 @@ if __name__ == '__main__':
     Classes = {0: 'YouTube', 1: 'Browsing', 2: 'Mining'}
 
     # loading the initial files...
-    yt = np.loadtxt('./data/initialDataFiles/YouTube.dat')
-    browsing = np.loadtxt('./data/initialDataFiles/Browsing.dat')
-    mining = np.loadtxt('./data/mining_download_upload_bytes.dat')
+    yt = np.loadtxt('data/initialDataFiles/YouTube.dat')
+    browsing = np.loadtxt('data/initialDataFiles/Browsing.dat')
+    mining = np.loadtxt('data/mining_download_upload_bytes.dat')
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
     yt_train, yt_test = breakTrainTest(yt)
