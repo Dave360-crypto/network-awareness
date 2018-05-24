@@ -47,10 +47,6 @@ def scalogramCWT(data, scales):
     C = 100 * C / sC
     N = C.shape[1]
     S = numpy.sum(C, axis=1) / N
-    fixscales = scales / centfrq;
-
-    for i in range(len(S)):
-        if numpy.isnan(S[i]):
-            S[i] = 0.0
+    fixscales = scales / centfrq
 
     return S, fixscales

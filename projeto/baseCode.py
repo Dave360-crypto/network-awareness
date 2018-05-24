@@ -147,7 +147,7 @@ def extractFeaturesSilence(data, Class=0):
 
 ## -- 7 -- ##
 
-def extractFeaturesWavelet(data, scales=[2, 4, 8, 16, 32], Class=0):
+def extractFeaturesWavelet(data, scales=[1, 2, 4, 8, 16], Class=0):
     features = []
     nObs, nSamp, nCols = data.shape
     oClass = np.ones((nObs, 1)) * Class
