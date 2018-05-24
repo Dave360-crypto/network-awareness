@@ -174,9 +174,9 @@ plt.ion()
 nfig = 1
 
 ## -- 1 -- ##
-yt = np.loadtxt('../dataFiles/YouTube.dat')
-browsing = np.loadtxt('../dataFiles/Browsing.dat')
-mining = np.loadtxt('mining_download_upload_bytes.dat')
+yt = np.loadtxt('./data/initialDataFiles/YouTube.dat')
+browsing = np.loadtxt('./data/initialDataFiles/Browsing.dat')
+mining = np.loadtxt('./data/mining_download_upload_bytes.dat')
 
 plt.figure(1)
 plot3Classes(yt, 'YouTube', browsing, 'Browsing', mining, 'Mining')
