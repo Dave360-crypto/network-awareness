@@ -7,20 +7,12 @@ from sklearn.preprocessing import StandardScaler
 import time
 import sys
 import warnings
+from sklearn.decomposition import PCA
+from train import scalogram
 
 warnings.filterwarnings('ignore')
 
-
-def waitforEnter(fstop=True):
-    if fstop:
-        if sys.version_info[0] == 2:
-            input("Press ENTER to continue.")
-        else:
-            input("Press ENTER to continue.")
-
-
 if __name__ == '__main__':
-
 
     ## -- 2 -- ##
     def breakTrainTest(data, oWnd=300, trainPerc=0.5):
@@ -73,27 +65,6 @@ if __name__ == '__main__':
             features.append(faux)
 
         return (np.array(features), oClass)
-
-
-    ## -- 4 -- ##
-    def plotFeatures(features, oClass, f1index=0, f2index=1):
-        nObs, nFea = features.shape
-        colors = ['b', 'g', 'r']
-        for i in range(nObs):
-            plt.plot(features[i, f1index], features[i, f2index], 'o' + colors[int(oClass[i])])
-
-        plt.show()
-        waitforEnter()
-
-
-    def logplotFeatures(features, oClass, f1index=0, f2index=1):
-        nObs, nFea = features.shape
-        colors = ['b', 'g', 'r']
-        for i in range(nObs):
-            plt.loglog(features[i, f1index], features[i, f2index], 'o' + colors[int(oClass[i])])
-
-        plt.show()
-        waitforEnter()
 
 
     ## -- 5 -- ##
@@ -166,31 +137,6 @@ if __name__ == '__main__':
     browsing_train, browsing_test = breakTrainTest(browsing)
     mining_train, mining_test = breakTrainTest(mining)
 
-    """
-    This section will plot upload and download values of each component (mining, youtube and browsing)
-    """
-    plt.subplot(3, 1, 1)
-    for i in range(len(yt_train)):
-        plt.plot(yt_train[i, :, 0], 'b')
-        plt.plot(yt_train[i, :, 1], 'g')
-    plt.title('YouTube')
-    plt.ylabel('Bytes/sec')
-    plt.subplot(3, 1, 2)
-    for i in range(len(browsing_train)):
-        plt.plot(browsing_train[i, :, 0], 'b')
-        plt.plot(browsing_train[i, :, 1], 'g')
-    plt.title('Browsing')
-    plt.ylabel('Bytes/sec')
-    plt.subplot(3, 1, 3)
-    for i in range(len(mining_train)):
-        plt.plot(mining_train[i, :, 0], 'b')
-        plt.plot(mining_train[i, :, 1], 'g')
-    plt.title('Mining')
-    plt.ylabel('Bytes/sec')
-    plt.show()
-    waitforEnter()
-
-    ## -- 3 -- ##
     features_yt, oClass_yt = extractFeatures(yt_train, Class=0)
     features_browsing, oClass_browsing = extractFeatures(browsing_train, Class=1)
     features_mining, oClass_mining = extractFeatures(mining_train, Class=2)
@@ -198,13 +144,6 @@ if __name__ == '__main__':
     features = np.vstack((features_yt, features_browsing, features_mining))
     oClass = np.vstack((oClass_yt, oClass_browsing, oClass_mining))
 
-    print('Train Stats Features Size:', features.shape)
-
-    ## -- 4 -- ##
-    plt.figure(4)
-    plotFeatures(features, oClass, 0, 1)  # 0,8
-
-    ## -- 5 -- ##
     features_ytS, oClass_yt = extractFeaturesSilence(yt_train, Class=0)
     features_browsingS, oClass_browsing = extractFeaturesSilence(browsing_train, Class=1)
     features_miningS, oClass_mining = extractFeaturesSilence(mining_train, Class=2)
@@ -212,35 +151,6 @@ if __name__ == '__main__':
     featuresS = np.vstack((features_ytS, features_browsingS, features_miningS))
     oClass = np.vstack((oClass_yt, oClass_browsing, oClass_mining))
 
-    print('Train Silence Features Size:', featuresS.shape)
-    plt.figure(5)
-    plotFeatures(featuresS, oClass, 0, 2)
-
-    ## -- 6 -- ##
-    import scalogram
-
-    scales = range(2, 128)
-    plt.figure(6)
-
-    i = 0
-    data = yt_train[i, :, 1]
-    S, scalesF = scalogram.scalogramCWT(data, scales)
-    plt.plot(scalesF, S, 'b')
-
-    nObs, nSamp, nCol = browsing_train.shape
-    data = browsing_train[i, :, 1]
-    S, scalesF = scalogram.scalogramCWT(data, scales)
-    plt.plot(scalesF, S, 'g')
-
-    nObs, nSamp, nCol = mining_train.shape
-    data = mining_train[i, :, 1]
-    S, scalesF = scalogram.scalogramCWT(data, scales)
-    plt.plot(scalesF, S, 'r')
-
-    plt.show()
-    waitforEnter()
-
-    ## -- 7 -- ##
     scales = [2, 4, 8, 16, 32, 64, 128, 256]
     features_ytW, oClass_yt = extractFeaturesWavelet(yt_train, scales, Class=0)
     features_browsingW, oClass_browsing = extractFeaturesWavelet(browsing_train, scales, Class=1)
@@ -249,38 +159,10 @@ if __name__ == '__main__':
     featuresW = np.vstack((features_ytW, features_browsingW, features_miningW))
     oClass = np.vstack((oClass_yt, oClass_browsing, oClass_mining))
 
-    print('Train Wavelet Features Size:', featuresW.shape)
-    plt.figure(7)
-    plotFeatures(featuresW, oClass, 3, 10)
-
-    ## -- 8 -- ##
-    from sklearn.decomposition import PCA
-
-    pca = PCA(n_components=2, svd_solver='full')
-    pcaFeatures = pca.fit(features).transform(features)
-
-    plt.figure(8)
-    plotFeatures(pcaFeatures, oClass, 0, 1)
-
-    ## -- 9 -- ##
-    pca = PCA(n_components=2, svd_solver='full')
-    pcaFeatures = pca.fit(featuresW).transform(featuresW)
-
-    plt.figure(9)
-    plotFeatures(pcaFeatures, oClass, 0, 1)
-
-    ## -- 10 -- ##
-
     allFeatures = np.hstack((features, featuresS, featuresW))
-    print('Train (All) Features Size:', allFeatures.shape)
 
     pca = PCA(n_components=3, svd_solver='full')
     pcaFeatures = pca.fit(allFeatures).transform(allFeatures)
-
-    plt.figure(9)
-    plotFeatures(pcaFeatures, oClass, 0, 1)
-
-    ## -- 11 -- ##
 
     centroids = {}
     for c in range(3):
@@ -321,7 +203,6 @@ if __name__ == '__main__':
                                                                                                                       testClass,
                                                                                                                       Classes[
                                                                                                                           testClass]))
-
     ## -- 12 -- #
     from scipy.stats import multivariate_normal
 
