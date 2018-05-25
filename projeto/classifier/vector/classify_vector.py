@@ -3,11 +3,12 @@ from colorama import Fore, Back, Style
 from sklearn.preprocessing import StandardScaler
 import pickle
 import os
+import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
 
-def classify_vector(unknown_data_features):
+def classify_vector(unknown_data_features, result="Mining"):
     """
 
     :param allFeatures:
@@ -63,23 +64,59 @@ def classify_vector(unknown_data_features):
 
     print(Fore.BLUE + "SVC:" + Style.RESET_ALL)
 
-    for key, value in svc_result.items():
-        print(key + ": " + str(int(value/nObsTest*100)) + "%")
+    first = True
+
+    for key, value in sorted(svc_result.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value/nObsTest*100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value/nObsTest*100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value/nObsTest*100)) + "%")
+
+        first = False
 
     print(Fore.BLUE + "\nKernel RBF:" + Style.RESET_ALL)
 
-    for key, value in kernel_rbf_result.items():
-        print(key + ": " + str(int(value/nObsTest*100)) + "%")
+    first = True
+
+    for key, value in sorted(kernel_rbf_result.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value/nObsTest*100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value/nObsTest*100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value/nObsTest*100)) + "%")
+
+        first = False
 
     print(Fore.BLUE + "\nKernel Poly:" + Style.RESET_ALL)
 
-    for key, value in kernel_poly_result.items():
-        print(key + ": " + str(int(value/nObsTest*100)) + "%")
+    first = True
+
+    for key, value in sorted(kernel_poly_result.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value / nObsTest * 100)) + "%")
+
+        first = False
 
     print(Fore.BLUE + "\nLinearSVC:" + Style.RESET_ALL)
 
-    for key, value in linear_svc_result.items():
-        print(key + ": " + str(int(value/nObsTest*100)) + "%")
+    first = True
+
+    for key, value in sorted(linear_svc_result.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value / nObsTest * 100)) + "%")
+
+        first = False
 
     return {
         "svc_result": svc_result,
