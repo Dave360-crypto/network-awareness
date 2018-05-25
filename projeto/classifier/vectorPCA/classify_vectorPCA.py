@@ -1,39 +1,22 @@
 from sklearn import svm
-import numpy as np
+from colorama import Fore, Back, Style
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+import pickle, os
+import operator
 
 
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
-def classify_vectorPCA(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
-    centroids = {}
-    for c in range(3):
-        pClass = (oClass == c).flatten()
-        centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
-    print('All Features Centroids:\n', centroids)
+def classify_vectorPCA(unknown_data_features, result="Mining"):
 
-    testFeatures_yt, oClass_yt = extractFeatures(yt_test, Class=0)
-    testFeatures_browsing, oClass_browsing = extractFeatures(browsing_test, Class=1)
-    testFeatures_mining, oClass_mining = extractFeatures(mining_test, Class=2)
-    testFeatures = np.vstack((testFeatures_yt, testFeatures_browsing, testFeatures_mining))
-
-    testFeatures_ytS, oClass_yt = extractFeaturesSilence(yt_test, Class=0)
-    testFeatures_browsingS, oClass_browsing = extractFeaturesSilence(browsing_test, Class=1)
-    testFeatures_miningS, oClass_mining = extractFeaturesSilence(mining_test, Class=2)
-    testFeaturesS = np.vstack((testFeatures_ytS, testFeatures_browsingS, testFeatures_miningS))
-
-    testFeatures_ytW, oClass_yt = extractFeaturesWavelet(yt_test, scales, Class=0)
-    testFeatures_browsingW, oClass_browsing = extractFeaturesWavelet(browsing_test, scales, Class=1)
-    testFeatures_miningW, oClass_mining = extractFeaturesWavelet(mining_test, scales, Class=2)
-    testFeaturesW = np.vstack((testFeatures_ytW, testFeatures_browsingW, testFeatures_miningW))
-
-    alltestFeatures = np.hstack((testFeatures, testFeaturesS, testFeaturesW))
+    with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
+        allFeatures, Classes, oClass = pickle.load(f)
 
     scaler = StandardScaler()
     NormAllFeatures = scaler.fit_transform(allFeatures)
 
-    NormAllTestFeatures = scaler.fit_transform(alltestFeatures)
+    NormAllTestFeatures = scaler.fit_transform(unknown_data_features)
 
     pca = PCA(n_components=3, svd_solver='full')
     NormPcaFeatures = pca.fit(NormAllFeatures).transform(NormAllFeatures)
@@ -57,8 +40,88 @@ def classify_vectorPCA(allFeatures, Classes, oClass, yt_test, browsing_test, min
     print('\n')
 
     nObsTest, nFea = NormTestPcaFeatures.shape
+
+    # result count
+
+
+    svc_result = {}
+    kernel_rbf_result = {}
+    kernel_poly_result = {}
+    linear_svc_result = {}
+
+    for classes in Classes.values():
+        svc_result[classes] = 0
+        kernel_rbf_result[classes] = 0
+        kernel_poly_result[classes] = 0
+        linear_svc_result[classes] = 0
+
     for i in range(nObsTest):
-        print('Obs: {:2}: SVC->{} | Kernel RBF->{} | Kernel Poly->{} | LinearSVC->{}'.format(i, Classes[L1[i]],
-                                                                                             Classes[L2[i]],
-                                                                                             Classes[L3[i]],
-                                                                                             Classes[L4[i]]))
+        svc_result[Classes[L1[i]]] += 1
+        kernel_rbf_result[Classes[L2[i]]] += 1
+        kernel_poly_result[Classes[L3[i]]] += 1
+        linear_svc_result[Classes[L4[i]]] += 1
+
+    print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
+
+    print(Fore.BLUE + "SVC:" + Style.RESET_ALL)
+
+    first = True
+
+    for key, value in sorted(svc_result.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value/nObsTest*100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value/nObsTest*100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value/nObsTest*100)) + "%")
+
+        first = False
+
+    print(Fore.BLUE + "\nKernel RBF:" + Style.RESET_ALL)
+
+    first = True
+
+    for key, value in sorted(kernel_rbf_result.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value/nObsTest*100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value/nObsTest*100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value/nObsTest*100)) + "%")
+
+        first = False
+
+    print(Fore.BLUE + "\nKernel Poly:" + Style.RESET_ALL)
+
+    first = True
+
+    for key, value in sorted(kernel_poly_result.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value / nObsTest * 100)) + "%")
+
+        first = False
+
+    print(Fore.BLUE + "\nLinearSVC:" + Style.RESET_ALL)
+
+    first = True
+
+    for key, value in sorted(linear_svc_result.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value / nObsTest * 100)) + "%")
+
+        first = False
+
+    return {
+        "svc_result": svc_result,
+        "kernel_rbf_result": kernel_rbf_result,
+        "kernel_poly_result": kernel_poly_result,
+        "linear_svc": linear_svc_result
+    }

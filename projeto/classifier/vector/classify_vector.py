@@ -43,6 +43,8 @@ def classify_vector(unknown_data_features, result="Mining"):
 
     nObsTest, nFea = NormAllTestFeatures.shape
 
+    # result count
+
     svc_result = {}
     kernel_rbf_result = {}
     kernel_poly_result = {}
