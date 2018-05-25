@@ -1,14 +1,6 @@
 import numpy as np
-import scipy.stats as stats
-import scipy.signal as signal
-import matplotlib.mlab as mlab
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
-import time
-import sys
 import warnings
-from sklearn.decomposition import PCA
-from train import scalogram
+from classifier import scalogram
 
 warnings.filterwarnings('ignore')
 

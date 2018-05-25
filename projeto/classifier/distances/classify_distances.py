@@ -1,11 +1,9 @@
-from sklearn.neural_network import MLPClassifier
 import numpy as np
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-from train.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+
+from classifier.classify import distance, extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 
 
-def classify_neuronalNetworks(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
+def classify_distances(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
     centroids = {}
     for c in range(3):
         pClass = (oClass == c).flatten()
@@ -29,26 +27,13 @@ def classify_neuronalNetworks(allFeatures, Classes, oClass, yt_test, browsing_te
 
     alltestFeatures = np.hstack((testFeatures, testFeaturesS, testFeaturesW))
 
-    scaler = StandardScaler()
-    NormAllFeatures = scaler.fit_transform(allFeatures)
-
-    NormAllTestFeatures = scaler.fit_transform(alltestFeatures)
-
-    pca = PCA(n_components=3, svd_solver='full')
-    NormPcaFeatures = pca.fit(NormAllFeatures).transform(NormAllFeatures)
-
-    NormTestPcaFeatures = pca.fit(NormAllTestFeatures).transform(NormAllTestFeatures)
-
-    print('\n-- Classification based on Neural Networks --')
-
-    alpha = 1
-    max_iter = 100000
-    clf = MLPClassifier(solver='lbfgs', alpha=alpha, hidden_layer_sizes=(100,), max_iter=max_iter)
-    clf.fit(NormPcaFeatures, oClass)
-    LT = clf.predict(NormTestPcaFeatures)
-    print('class (from test PCA):', LT)
-
-    nObsTest, nFea = NormTestPcaFeatures.shape
+    print('\n-- Classification based on Distances --')
+    nObsTest, nFea = alltestFeatures.shape
     for i in range(nObsTest):
-        print('Obs: {:2}: Classification->{}'.format(i, Classes[LT[i]]))
-
+        x = alltestFeatures[i]
+        dists = [distance(x, centroids[0]), distance(x, centroids[1]), distance(x, centroids[2])]
+        ndists = dists / np.sum(dists)
+        testClass = np.argsort(dists)[0]
+        print(
+            'Obs: {:2}: Normalized Distances to Centroids: [{:.4f},{:.4f},{:.4f}] -> Classification: {} -> {}'.format(i,
+                                                                                                                      *ndists,testClass, Classes[testClass]))

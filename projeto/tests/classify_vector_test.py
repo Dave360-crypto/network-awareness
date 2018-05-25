@@ -1,17 +1,23 @@
 import numpy as np
-from train.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence
-from train.classify_neuronalNetworks import classify_neuronalNetworks
+
+import sys, os
+sys.path.append("..")
+
+from classifier.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence
+from classifier.vector.classify_vector import classify_vector
+
+
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "classifier/data/")
+
 
 if __name__ == '__main__':
-    ########### Main Code #############
-
     # classes
     Classes = {0: 'YouTube', 1: 'Browsing', 2: 'Mining'}
 
     # loading the initial files...
-    yt = np.loadtxt('data/initialDataFiles/YouTube.dat')
-    browsing = np.loadtxt('data/initialDataFiles/Browsing.dat')
-    mining = np.loadtxt('data/mining_download_upload_bytes.dat')
+    yt = np.loadtxt(DATA_PATH + 'initialDataFiles/YouTube.dat')
+    browsing = np.loadtxt(DATA_PATH + 'initialDataFiles/Browsing.dat')
+    mining = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
     yt_train, yt_test = breakTrainTest(yt)
@@ -42,4 +48,4 @@ if __name__ == '__main__':
 
     allFeatures = np.hstack((features, featuresS, featuresW))
 
-    classify_neuronalNetworks(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales)
+    classify_vector(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales)

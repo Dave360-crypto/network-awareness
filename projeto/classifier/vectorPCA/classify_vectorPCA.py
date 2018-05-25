@@ -1,14 +1,12 @@
-from sklearn.cluster import KMeans
+from sklearn import svm
 import numpy as np
-from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from train.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 
-def classify_clustering(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
-    pca = PCA(n_components=3, svd_solver='full')
-    pcaFeatures = pca.fit(allFeatures).transform(allFeatures)
 
+
+def classify_vectorPCA(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
     centroids = {}
     for c in range(3):
         pClass = (oClass == c).flatten()
@@ -42,40 +40,25 @@ def classify_clustering(allFeatures, Classes, oClass, yt_test, browsing_test, mi
 
     NormTestPcaFeatures = pca.fit(NormAllTestFeatures).transform(NormAllTestFeatures)
 
-    print('\n-- Classification based on Clustering (Kmeans) --')
-    # K-means assuming 3 clusters
-    centroids = np.array([])
-    for c in range(3):
-        pClass = (oClass == c).flatten()
-        centroids = np.append(centroids, np.mean(NormPcaFeatures[pClass, :], axis=0))
-    centroids = centroids.reshape((3, 3))
-    print('PCA (pcaFeatures) Centroids:\n', centroids)
+    print('\n-- Classification based on Support Vector Machines  (PCA Features) --')
+    svc = svm.SVC(kernel='linear').fit(NormPcaFeatures, oClass)
+    rbf_svc = svm.SVC(kernel='rbf').fit(NormPcaFeatures, oClass)
+    poly_svc = svm.SVC(kernel='poly', degree=2).fit(NormPcaFeatures, oClass)
+    lin_svc = svm.LinearSVC().fit(NormPcaFeatures, oClass)
 
-    kmeans = KMeans(init=centroids, n_clusters=3)
-    kmeans.fit(NormPcaFeatures)
-    labels = kmeans.labels_
-    print('Labels:', labels)
+    L1 = svc.predict(NormTestPcaFeatures)
+    print('class (from test PCA features with SVC):', L1)
+    L2 = rbf_svc.predict(NormTestPcaFeatures)
+    print('class (from test PCA features with Kernel RBF):', L2)
+    L3 = poly_svc.predict(NormTestPcaFeatures)
+    print('class (from test PCA features with Kernel poly):', L3)
+    L4 = lin_svc.predict(NormTestPcaFeatures)
+    print('class (from test PCA features with Linear SVC):', L4)
+    print('\n')
 
-    # Determines and quantifies the presence of each original class observation in each cluster
-    KMclass = np.zeros((3, 3))
-    for cluster in range(3):
-        p = (labels == cluster)
-        aux = oClass[p]
-        for c in range(3):
-            KMclass[cluster, c] = np.sum(aux == c)
-
-    probKMclass = KMclass / np.sum(KMclass, axis=1)[:, np.newaxis]
-    print(probKMclass)
     nObsTest, nFea = NormTestPcaFeatures.shape
     for i in range(nObsTest):
-        x = NormTestPcaFeatures[i, :].reshape((1, nFea))
-        label = kmeans.predict(x)
-        testClass = 100 * probKMclass[label, :].flatten()
-        print('Obs: {:2}: Probabilities beeing in each class: [{:.2f}%,{:.2f}%,{:.2f}%]'.format(i, *testClass))
-
-
-    # DBSCAN assuming a neighborhood maximum distance of 1e11
-    dbscan = DBSCAN(eps=10000)
-    dbscan.fit(pcaFeatures)
-    labels = dbscan.labels_
-    print('Labels:', labels)
+        print('Obs: {:2}: SVC->{} | Kernel RBF->{} | Kernel Poly->{} | LinearSVC->{}'.format(i, Classes[L1[i]],
+                                                                                             Classes[L2[i]],
+                                                                                             Classes[L3[i]],
+                                                                                             Classes[L4[i]]))

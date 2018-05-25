@@ -1,7 +1,7 @@
 from scipy.stats import multivariate_normal
 import numpy as np
 from sklearn.decomposition import PCA
-from train.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 
 
 def classify_multivaritePCA(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):

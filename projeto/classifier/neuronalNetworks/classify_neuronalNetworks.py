@@ -1,10 +1,11 @@
-from sklearn import svm
+from sklearn.neural_network import MLPClassifier
 import numpy as np
+from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from train.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 
 
-def classify_vector(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
+def classify_neuronalNetworks(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
     centroids = {}
     for c in range(3):
         pClass = (oClass == c).flatten()
@@ -33,25 +34,21 @@ def classify_vector(allFeatures, Classes, oClass, yt_test, browsing_test, mining
 
     NormAllTestFeatures = scaler.fit_transform(alltestFeatures)
 
-    print('\n-- Classification based on Support Vector Machines --')
-    svc = svm.SVC(kernel='linear').fit(NormAllFeatures, oClass)
-    rbf_svc = svm.SVC(kernel='rbf').fit(NormAllFeatures, oClass)
-    poly_svc = svm.SVC(kernel='poly', degree=2).fit(NormAllFeatures, oClass)
-    lin_svc = svm.LinearSVC().fit(NormAllFeatures, oClass)
+    pca = PCA(n_components=3, svd_solver='full')
+    NormPcaFeatures = pca.fit(NormAllFeatures).transform(NormAllFeatures)
 
-    L1 = svc.predict(NormAllTestFeatures)
-    print('class (from test PCA features with SVC):', L1)
-    L2 = rbf_svc.predict(NormAllTestFeatures)
-    print('class (from test PCA features with Kernel RBF):', L2)
-    L3 = poly_svc.predict(NormAllTestFeatures)
-    print('class (from test PCA features with Kernel poly):', L3)
-    L4 = lin_svc.predict(NormAllTestFeatures)
-    print('class (from test PCA features with Linear SVC):', L4)
-    print('\n')
+    NormTestPcaFeatures = pca.fit(NormAllTestFeatures).transform(NormAllTestFeatures)
 
-    nObsTest, nFea = NormAllTestFeatures.shape
+    print('\n-- Classification based on Neural Networks --')
+
+    alpha = 1
+    max_iter = 100000
+    clf = MLPClassifier(solver='lbfgs', alpha=alpha, hidden_layer_sizes=(100,), max_iter=max_iter)
+    clf.fit(NormPcaFeatures, oClass)
+    LT = clf.predict(NormTestPcaFeatures)
+    print('class (from test PCA):', LT)
+
+    nObsTest, nFea = NormTestPcaFeatures.shape
     for i in range(nObsTest):
-        print('Obs: {:2}: SVC->{} | Kernel RBF->{} | Kernel Poly->{} | LinearSVC->{}'.format(i, Classes[L1[i]],
-                                                                                             Classes[L2[i]],
-                                                                                             Classes[L3[i]],
-                                                                                             Classes[L4[i]]))
+        print('Obs: {:2}: Classification->{}'.format(i, Classes[LT[i]]))
+
