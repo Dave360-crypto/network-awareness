@@ -36,6 +36,35 @@ def breakTrainTest(data, oWnd=300, trainPerc=0.5):
     return (data_train, data_test)
 
 
+def breakData(data, oWnd=300):
+    """
+    Used to break the data in observation windows. It will remove the windows with the mean (up and down) equal to zero.
+    :param data: all data
+    :param oWnd: window size
+    :return: data without zeros reshaped in obs wnd and cols
+    """
+    nSamp, nCols = data.shape
+    nObs = int(nSamp / oWnd)
+    data_obs = data[:nObs * oWnd].reshape((nObs, oWnd, nCols))
+
+    data_withoutzeros = []
+
+    for i in range(0, nObs):
+        mean = np.mean(data_obs[i, :, :], axis=0)
+        if mean[0] == 0 and mean[1] == 0:
+            pass
+        else:
+            data_withoutzeros.append(data_obs[i, :, :])
+
+    data_withoutzeros = np.array(data_withoutzeros)
+
+    nObs, oWnd, nCols = data_withoutzeros.shape
+
+    data_withoutzeros = data_withoutzeros[:nObs * oWnd].reshape((nObs, oWnd, nCols))
+
+    return data_withoutzeros
+
+
 def extractFeatures(data, Class=0):
     features = []
     nObs, nSamp, nCols = data.shape
