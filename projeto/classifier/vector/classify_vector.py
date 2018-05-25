@@ -1,9 +1,13 @@
 from sklearn import svm
 from colorama import Fore, Back, Style
 from sklearn.preprocessing import StandardScaler
+import pickle
+import os
+
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
 
-def classify_vector(allFeatures, Classes, oClass, unknown_data_features):
+def classify_vector(unknown_data_features):
     """
 
     :param allFeatures:
@@ -12,6 +16,10 @@ def classify_vector(allFeatures, Classes, oClass, unknown_data_features):
     :param unknown_data_features:
     :return:
     """
+
+    with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
+        allFeatures, Classes, oClass = pickle.load(f)
+
     scaler = StandardScaler()
     NormAllFeatures = scaler.fit_transform(allFeatures[:, :unknown_data_features.shape[1]])
 
