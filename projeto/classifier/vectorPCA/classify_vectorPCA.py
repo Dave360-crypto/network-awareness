@@ -13,6 +13,8 @@ def classify_vectorPCA(unknown_data_features, result="Mining"):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)
 
+    allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
+
     scaler = StandardScaler()
     NormAllFeatures = scaler.fit_transform(allFeatures)
 

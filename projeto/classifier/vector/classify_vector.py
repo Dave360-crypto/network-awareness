@@ -21,8 +21,10 @@ def classify_vector(unknown_data_features, result="Mining"):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)
 
+    allFeatures = allFeatures[:,:unknown_data_features.shape[1]]
+
     scaler = StandardScaler()
-    NormAllFeatures = scaler.fit_transform(allFeatures[:, :unknown_data_features.shape[1]])
+    NormAllFeatures = scaler.fit_transform(allFeatures)
 
     NormAllTestFeatures = scaler.fit_transform(unknown_data_features)
 
