@@ -4,16 +4,12 @@ from sklearn.preprocessing import StandardScaler
 from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 
 
-def classify_vector(allFeatures, Classes, oClass, scales, interval_data):
+def classify_vector(allFeatures, Classes, oClass, scales, break_data):
 
-    testFeatures_data, oClass_data = extractFeatures(interval_data)
-    testFeatures = np.vstack((testFeatures_data))
-
-    testFeaturesv_data, oClass__data = extractFeaturesSilence(interval_data)
-    testFeaturesS = np.vstack(testFeaturesv_data)
-
-    testFeatures_data, oClass__data = extractFeaturesWavelet(interval_data, scales)
-    testFeaturesW = np.vstack((testFeatures_data))
+    testFeatures_data = extractFeatures(break_data)[0]
+    testFeaturesS_data = extractFeaturesSilence(break_data)[0]
+    testFeaturesW_data = extractFeaturesWavelet(break_data)[0]
+    alltestFeatures = np.vstack((testFeatures_data, testFeaturesS_data, testFeaturesW_data))
 
     """
     testFeatures_yt, oClass_yt = extractFeatures(yt_test, Class=0)
@@ -30,9 +26,10 @@ def classify_vector(allFeatures, Classes, oClass, scales, interval_data):
     testFeatures_browsingW, oClass_browsing = extractFeaturesWavelet(browsing_test, scales, Class=1)
     testFeatures_miningW, oClass_mining = extractFeaturesWavelet(mining_test, scales, Class=2)
     testFeaturesW = np.vstack((testFeatures_ytW, testFeatures_browsingW, testFeatures_miningW))
-    """
+   
 
     alltestFeatures = np.hstack((testFeatures, testFeaturesS, testFeaturesW))
+    """
 
     scaler = StandardScaler()
     NormAllFeatures = scaler.fit_transform(allFeatures)
