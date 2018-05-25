@@ -24,11 +24,10 @@ if __name__ == '__main__':
 
     # break data
     break_data = breakData(unknown_data)
-
     # extract features of the unknown break data
-    features_data, oClass_data = extractFeatures(break_data)[0]
-    features_dataS, oClass_data = extractFeaturesSilence(break_data)[0]
-    features_dataW, oClass_data = extractFeaturesWavelet(break_data)[0]
+    features_data = extractFeatures(break_data)[0]
+    features_dataS = extractFeaturesSilence(break_data)[0]
+    features_dataW = extractFeaturesWavelet(break_data)[0]
 
     unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
 
