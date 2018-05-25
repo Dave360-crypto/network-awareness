@@ -4,14 +4,10 @@ from sklearn.preprocessing import StandardScaler
 from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 
 
-def classify_vector(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
-    centroids = {}
-    for c in range(3):
-        pClass = (oClass == c).flatten()
-        centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
-    print('All Features Centroids:\n', centroids)
+def classify_vector(allFeatures, Classes, oClass, interval_data):
+    scales = [2, 4, 8, 16, 32, 64, 128, 256]
 
-    testFeatures_yt, oClass_yt = extractFeatures(yt_test, Class=0)
+    testFeatures_yt, oClass_yt = extractFeatures(interval_data, Class=0)
     testFeatures_browsing, oClass_browsing = extractFeatures(browsing_test, Class=1)
     testFeatures_mining, oClass_mining = extractFeatures(mining_test, Class=2)
     testFeatures = np.vstack((testFeatures_yt, testFeatures_browsing, testFeatures_mining))

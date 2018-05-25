@@ -4,7 +4,7 @@ from classifier import scalogram
 
 warnings.filterwarnings('ignore')
 
-## -- 2 -- ##
+
 def breakTrainTest(data, oWnd=300, trainPerc=0.5):
     nSamp, nCols = data.shape
     nObs = int(nSamp / oWnd)
@@ -36,7 +36,6 @@ def breakTrainTest(data, oWnd=300, trainPerc=0.5):
     return (data_train, data_test)
 
 
-## -- 3 -- ##
 def extractFeatures(data, Class=0):
     features = []
     nObs, nSamp, nCols = data.shape
@@ -57,7 +56,6 @@ def extractFeatures(data, Class=0):
     return (np.array(features), oClass)
 
 
-## -- 5 -- ##
 def extratctSilence(data, threshold=256):
     if (data[0] <= threshold):
         s = [1]
@@ -90,8 +88,6 @@ def extractFeaturesSilence(data, Class=0):
     return (np.array(features), oClass)
 
 
-## -- 7 -- ##
-
 def extractFeaturesWavelet(data, scales=[2, 4, 8, 16, 32], Class=0):
     features = []
     nObs, nSamp, nCols = data.shape
@@ -108,7 +104,6 @@ def extractFeaturesWavelet(data, scales=[2, 4, 8, 16, 32], Class=0):
     return (np.array(features), oClass)
 
 
-## -- 11 -- ##
 def distance(c, p):
     return (np.sqrt(np.sum(np.square(p - c))))
 
