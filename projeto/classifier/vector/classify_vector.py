@@ -9,7 +9,12 @@ def classify_vector(allFeatures, Classes, oClass, scales, break_data):
     testFeatures_data = extractFeatures(break_data)[0]
     testFeaturesS_data = extractFeaturesSilence(break_data)[0]
     testFeaturesW_data = extractFeaturesWavelet(break_data)[0]
-    alltestFeatures = np.vstack((testFeatures_data, testFeaturesS_data, testFeaturesW_data))
+
+    testFeatures = np.vstack(testFeatures_data)
+    testFeaturesS = np.vstack(testFeaturesS_data)
+    testFeaturesW = np.vstack(testFeaturesW_data)
+
+    alltestFeatures = np.hstack((testFeatures, testFeaturesS, testFeaturesW))
 
     """
     testFeatures_yt, oClass_yt = extractFeatures(yt_test, Class=0)
@@ -27,7 +32,7 @@ def classify_vector(allFeatures, Classes, oClass, scales, break_data):
     testFeatures_miningW, oClass_mining = extractFeaturesWavelet(mining_test, scales, Class=2)
     testFeaturesW = np.vstack((testFeatures_ytW, testFeatures_browsingW, testFeatures_miningW))
    
-
+    
     alltestFeatures = np.hstack((testFeatures, testFeaturesS, testFeaturesW))
     """
 
