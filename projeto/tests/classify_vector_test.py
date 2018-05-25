@@ -61,4 +61,4 @@ if __name__ == '__main__':
 
     allFeatures = np.hstack((features, featuresS, featuresW))
 
-    classify_vector(allFeatures, Classes, oClass, unknown_data_features)
+    classify_vector(allFeatures, Classes, oClass, scales, unknown_data_features)
