@@ -1,45 +1,13 @@
 from sklearn import svm
-import numpy as np
+from colorama import Fore, Back, Style
 from sklearn.preprocessing import StandardScaler
-from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 
 
-def classify_vector(allFeatures, Classes, oClass, scales, break_data):
-
-    testFeatures_data = extractFeatures(break_data)[0]
-    testFeaturesS_data = extractFeaturesSilence(break_data)[0]
-    testFeaturesW_data = extractFeaturesWavelet(break_data)[0]
-
-    testFeatures = np.vstack(testFeatures_data)
-    testFeaturesS = np.vstack(testFeaturesS_data)
-    testFeaturesW = np.vstack(testFeaturesW_data)
-
-    alltestFeatures = np.hstack((testFeatures, testFeaturesS, testFeaturesW))
-
-    """
-    testFeatures_yt, oClass_yt = extractFeatures(yt_test, Class=0)
-    testFeatures_browsing, oClass_browsing = extractFeatures(browsing_test, Class=1)
-    testFeatures_mining, oClass_mining = extractFeatures(mining_test, Class=2)
-    testFeatures = np.vstack((testFeatures_yt, testFeatures_browsing, testFeatures_mining))
-
-    testFeatures_ytS, oClass_yt = extractFeaturesSilence(yt_test, Class=0)
-    testFeatures_browsingS, oClass_browsing = extractFeaturesSilence(browsing_test, Class=1)
-    testFeatures_miningS, oClass_mining = extractFeaturesSilence(mining_test, Class=2)
-    testFeaturesS = np.vstack((testFeatures_ytS, testFeatures_browsingS, testFeatures_miningS))
-
-    testFeatures_ytW, oClass_yt = extractFeaturesWavelet(yt_test, scales, Class=0)
-    testFeatures_browsingW, oClass_browsing = extractFeaturesWavelet(browsing_test, scales, Class=1)
-    testFeatures_miningW, oClass_mining = extractFeaturesWavelet(mining_test, scales, Class=2)
-    testFeaturesW = np.vstack((testFeatures_ytW, testFeatures_browsingW, testFeatures_miningW))
-   
-    
-    alltestFeatures = np.hstack((testFeatures, testFeaturesS, testFeaturesW))
-    """
-
+def classify_vector(allFeatures, Classes, oClass, unknown_data_features):
     scaler = StandardScaler()
-    NormAllFeatures = scaler.fit_transform(allFeatures)
+    NormAllFeatures = scaler.fit_transform(allFeatures[:, :unknown_data_features.shape[1]])
 
-    NormAllTestFeatures = scaler.fit_transform(alltestFeatures)
+    NormAllTestFeatures = scaler.fit_transform(unknown_data_features)
 
     print('\n-- Classification based on Support Vector Machines --')
     svc = svm.SVC(kernel='linear').fit(NormAllFeatures, oClass)
@@ -47,19 +15,52 @@ def classify_vector(allFeatures, Classes, oClass, scales, break_data):
     poly_svc = svm.SVC(kernel='poly', degree=2).fit(NormAllFeatures, oClass)
     lin_svc = svm.LinearSVC().fit(NormAllFeatures, oClass)
 
+    # predict
     L1 = svc.predict(NormAllTestFeatures)
-    print('class (from test PCA features with SVC):', L1)
+
     L2 = rbf_svc.predict(NormAllTestFeatures)
-    print('class (from test PCA features with Kernel RBF):', L2)
+
     L3 = poly_svc.predict(NormAllTestFeatures)
-    print('class (from test PCA features with Kernel poly):', L3)
+
     L4 = lin_svc.predict(NormAllTestFeatures)
-    print('class (from test PCA features with Linear SVC):', L4)
-    print('\n')
 
     nObsTest, nFea = NormAllTestFeatures.shape
+
+    svc_result = {}
+    kernel_rbf_result = {}
+    kernel_poly_result = {}
+    linear_svc_result = {}
+
+    for classes in Classes.values():
+        svc_result[classes] = 0
+        kernel_rbf_result[classes] = 0
+        kernel_poly_result[classes] = 0
+        linear_svc_result[classes] = 0
+
     for i in range(nObsTest):
-        print('Obs: {:2}: SVC->{} | Kernel RBF->{} | Kernel Poly->{} | LinearSVC->{}'.format(i, Classes[L1[i]],
-                                                                                             Classes[L2[i]],
-                                                                                             Classes[L3[i]],
-                                                                                             Classes[L4[i]]))
+        svc_result[Classes[L1[i]]] += 1
+        kernel_rbf_result[Classes[L2[i]]] += 1
+        kernel_poly_result[Classes[L3[i]]] += 1
+        linear_svc_result[Classes[L4[i]]] += 1
+
+    print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
+
+    print(Fore.BLUE + "SVC:" + Style.RESET_ALL)
+
+    for key, value in svc_result.items():
+        print(key + ": " + str(int(value/nObsTest*100)) + "%")
+
+    print(Fore.BLUE + "\nKernel RBF:" + Style.RESET_ALL)
+
+    for key, value in kernel_rbf_result.items():
+        print(key + ": " + str(int(value/nObsTest*100)) + "%")
+
+    print(Fore.BLUE + "\nKernel Poly:" + Style.RESET_ALL)
+
+    for key, value in kernel_poly_result.items():
+        print(key + ": " + str(int(value/nObsTest*100)) + "%")
+
+    print(Fore.BLUE + "\nLinearSVC:" + Style.RESET_ALL)
+
+    for key, value in linear_svc_result.items():
+        print(key + ": " + str(int(value/nObsTest*100)) + "%")
