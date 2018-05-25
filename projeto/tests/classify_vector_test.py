@@ -3,7 +3,7 @@ import numpy as np
 import sys, os
 sys.path.append("..")
 
-from classifier.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence
+from classifier.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData
 from classifier.vector.classify_vector import classify_vector
 
 
@@ -18,6 +18,15 @@ if __name__ == '__main__':
     yt = np.loadtxt(DATA_PATH + 'initialDataFiles/YouTube.dat')
     browsing = np.loadtxt(DATA_PATH + 'initialDataFiles/Browsing.dat')
     mining = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
+
+    # classify unknown data
+    unknown_data = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
+
+    # break data
+    break_data = breakData(unknown_data)
+
+    # extract features of the unknown break data
+    # features_data = ....
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
     yt_train, yt_test = breakTrainTest(yt)
