@@ -4,6 +4,14 @@ from sklearn.preprocessing import StandardScaler
 
 
 def classify_vector(allFeatures, Classes, oClass, unknown_data_features):
+    """
+
+    :param allFeatures:
+    :param Classes:
+    :param oClass:
+    :param unknown_data_features:
+    :return:
+    """
     scaler = StandardScaler()
     NormAllFeatures = scaler.fit_transform(allFeatures[:, :unknown_data_features.shape[1]])
 
@@ -64,3 +72,10 @@ def classify_vector(allFeatures, Classes, oClass, unknown_data_features):
 
     for key, value in linear_svc_result.items():
         print(key + ": " + str(int(value/nObsTest*100)) + "%")
+
+    return {
+        "svc_result": svc_result,
+        "kernel_rbf_result": kernel_rbf_result,
+        "kernel_poly_result": kernel_poly_result,
+        "linear_svc": linear_svc_result
+    }
