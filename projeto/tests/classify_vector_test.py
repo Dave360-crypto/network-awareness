@@ -1,9 +1,11 @@
 import numpy as np
-from classifier.classify import extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData
-from classifier.vector.classify_vector import classify_vector
 
 import sys, os
 sys.path.append("..")
+
+from classifier.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData
+from classifier.vector.classify_vector import classify_vector
+
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "classifier/data/")
 
@@ -21,38 +23,26 @@ if __name__ == '__main__':
     unknown_data = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
 
     # break data
-    data = breakData(unknown_data)
+    break_data = breakData(unknown_data)
 
     # extract features of the unknown break data
+    features_data = extractFeatures(break_data)[0]
+    features_dataS = extractFeaturesSilence(break_data)[0]
+    features_dataW = extractFeaturesWavelet(break_data)[0]
 
-    features_data, oClass_data = extractFeatures(data)
+    unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
 
-    features = np.vstack((features_data))
-    oClass = np.vstack((oClass_data))
-
-    features_dataS, oClass_data = extractFeaturesSilence(data)
-
-    featuresS = np.vstack((features_dataS))
-    oClass = np.vstack((oClass_data))
-
-    scales = [2, 4, 8, 16, 32, 64, 128, 256]
-    features_dataW, oClass_data = extractFeaturesWavelet(data, scales)
-
-    featuresW = np.vstack((features_dataW))
-    oClass = np.vstack((oClass_data))
-
-    """
+    # creating train and test data for each Class (YouTube, Browsing and Mining)
     yt_train, yt_test = breakTrainTest(yt)
     browsing_train, browsing_test = breakTrainTest(browsing)
     mining_train, mining_test = breakTrainTest(mining)
-    
+
     features_yt, oClass_yt = extractFeatures(yt_train, Class=0)
     features_browsing, oClass_browsing = extractFeatures(browsing_train, Class=1)
     features_mining, oClass_mining = extractFeatures(mining_train, Class=2)
 
     features = np.vstack((features_yt, features_browsing, features_mining))
     oClass = np.vstack((oClass_yt, oClass_browsing, oClass_mining))
-    
 
     features_ytS, oClass_yt = extractFeaturesSilence(yt_train, Class=0)
     features_browsingS, oClass_browsing = extractFeaturesSilence(browsing_train, Class=1)
@@ -60,17 +50,15 @@ if __name__ == '__main__':
 
     featuresS = np.vstack((features_ytS, features_browsingS, features_miningS))
     oClass = np.vstack((oClass_yt, oClass_browsing, oClass_mining))
-    
 
+    scales = [2, 4, 8, 16, 32, 64, 128, 256]
     features_ytW, oClass_yt = extractFeaturesWavelet(yt_train, scales, Class=0)
     features_browsingW, oClass_browsing = extractFeaturesWavelet(browsing_train, scales, Class=1)
     features_miningW, oClass_mining = extractFeaturesWavelet(mining_train, scales, Class=2)
-    
+
     featuresW = np.vstack((features_ytW, features_browsingW, features_miningW))
     oClass = np.vstack((oClass_yt, oClass_browsing, oClass_mining))
-    """
-    print(oClass)
 
     allFeatures = np.hstack((features, featuresS, featuresW))
 
-    classify_vector(allFeatures, Classes, oClass, scales, data)
+    classify_vector(allFeatures, Classes, oClass, unknown_data_features)
