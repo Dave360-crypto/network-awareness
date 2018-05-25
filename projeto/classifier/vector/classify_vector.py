@@ -6,13 +6,13 @@ from classifier.classify import extractFeatures, extractFeaturesSilence, extract
 
 def classify_vector(allFeatures, Classes, oClass, scales, interval_data):
 
-    testFeatures_data, oClass_data = extractFeatures(interval_data, Class=0)
+    testFeatures_data, oClass_data = extractFeatures(interval_data)
     testFeatures = np.vstack((testFeatures_data))
 
-    testFeaturesv_data, oClass__data = extractFeaturesSilence(interval_data, Class=0)
+    testFeaturesv_data, oClass__data = extractFeaturesSilence(interval_data)
     testFeaturesS = np.vstack(testFeaturesv_data)
 
-    testFeatures_data, oClass__data = extractFeaturesWavelet(interval_data, scales, Class=0)
+    testFeatures_data, oClass__data = extractFeaturesWavelet(interval_data, scales)
     testFeaturesW = np.vstack((testFeatures_data))
 
     """
