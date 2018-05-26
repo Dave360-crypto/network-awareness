@@ -1,7 +1,11 @@
 #------------------------------------LISTENER YOUTUBE------------------------------------------------
+import numpy as np
 import pyshark
 import socket
 import datetime
+
+from classifier.classify import breakData, extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+from classifier.clustering.classify_clustering import classify_clustering
 
 capture = pyshark.LiveCapture(interface='en0', bpf_filter='tcp port 443', )
 
@@ -28,7 +32,7 @@ def print_callback(pkt):
     index += 1
 
 try:
-    capture.apply_on_packets(print_callback, timeout=30)
+    capture.apply_on_packets(print_callback, timeout=300)
 except Exception as e:
     last_timestamp = 0
     print("Timeout")
@@ -98,7 +102,7 @@ except Exception as e:
 
 #------------------------------------PROCESS DATA------------------------------------------------
 
-download_upload_bytes = " "
+download_upload_bytes = []
 
 lines_download = len(download_bytes)
 lines_upload = len(upload_bytes)
@@ -112,6 +116,16 @@ print("down:", download_bytes)
 print("up:", upload_bytes)
 
 for i in range(0, size_bytes):
-    download_upload_bytes += str(download_bytes[i]) + " " + str(upload_bytes[i]) + "\n"
+    download_upload_bytes.append([download_bytes[i], upload_bytes[i]])
 
-print(download_upload_bytes)
+unknown_data = np.array(download_upload_bytes).reshape(size_bytes, 2)
+
+break_data = breakData(unknown_data)
+
+features_data = extractFeatures(break_data)[0]
+features_dataS = extractFeaturesSilence(break_data)[0]
+features_dataW = extractFeaturesWavelet(break_data)[0]
+unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
+
+#clustering
+classify_clustering(unknown_data_features)

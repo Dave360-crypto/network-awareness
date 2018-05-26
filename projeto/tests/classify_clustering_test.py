@@ -15,6 +15,7 @@ if __name__ == '__main__':
     # classify unknown data
     unknown_data = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
 
+
     # break data
     break_data = breakData(unknown_data)
 

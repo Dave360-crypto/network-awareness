@@ -57,6 +57,7 @@ def breakData(data, oWnd=300):
             data_withoutzeros.append(data_obs[i, :, :])
 
     data_withoutzeros = np.array(data_withoutzeros)
+    print(data_withoutzeros)
 
     nObs, oWnd, nCols = data_withoutzeros.shape
 
