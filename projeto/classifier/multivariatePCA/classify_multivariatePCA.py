@@ -59,7 +59,9 @@ def classify_multivaritePCA(unknown_data_features, result="Mining"):
 
         result_dict[Classes[testClass]] += 1
 
-    print(Fore.BLUE + "\nMultivariatePCA:" + Style.RESET_ALL)
+    print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
+
+    print(Fore.BLUE + "MultivariatePCA:" + Style.RESET_ALL)
 
     first = True
 

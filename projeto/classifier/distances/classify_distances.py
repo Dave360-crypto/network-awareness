@@ -37,7 +37,9 @@ def classify_distances(unknown_data_features, result="Mining"):
 
         result_dict[Classes[testClass]] += 1
 
-    print(Fore.BLUE + "\nClassification based on Distances:" + Style.RESET_ALL)
+    print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
+
+    print(Fore.BLUE + "Classification based on Distances:" + Style.RESET_ALL)
 
     first = True
 

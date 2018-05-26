@@ -28,7 +28,6 @@ def classify_vector(unknown_data_features, result="Mining"):
 
     NormAllTestFeatures = scaler.fit_transform(unknown_data_features)
 
-    print('\n-- Classification based on Support Vector Machines --')
     svc = svm.SVC(kernel='linear').fit(NormAllFeatures, oClass)
     rbf_svc = svm.SVC(kernel='rbf').fit(NormAllFeatures, oClass)
     poly_svc = svm.SVC(kernel='poly', degree=2).fit(NormAllFeatures, oClass)

@@ -25,21 +25,15 @@ def classify_vectorPCA(unknown_data_features, result="Mining"):
 
     NormTestPcaFeatures = pca.fit(NormAllTestFeatures).transform(NormAllTestFeatures)
 
-    print('\n-- Classification based on Support Vector Machines  (PCA Features) --')
     svc = svm.SVC(kernel='linear').fit(NormPcaFeatures, oClass)
     rbf_svc = svm.SVC(kernel='rbf').fit(NormPcaFeatures, oClass)
     poly_svc = svm.SVC(kernel='poly', degree=2).fit(NormPcaFeatures, oClass)
     lin_svc = svm.LinearSVC().fit(NormPcaFeatures, oClass)
 
     L1 = svc.predict(NormTestPcaFeatures)
-    print('class (from test PCA features with SVC):', L1)
     L2 = rbf_svc.predict(NormTestPcaFeatures)
-    print('class (from test PCA features with Kernel RBF):', L2)
     L3 = poly_svc.predict(NormTestPcaFeatures)
-    print('class (from test PCA features with Kernel poly):', L3)
     L4 = lin_svc.predict(NormTestPcaFeatures)
-    print('class (from test PCA features with Linear SVC):', L4)
-    print('\n')
 
     nObsTest, nFea = NormTestPcaFeatures.shape
 
