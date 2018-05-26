@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     # loading the initial files...
     yt = np.loadtxt(DATA_PATH + 'youtube_download_upload_bytes.dat')
-    browsing = np.loadtxt(DATA_PATH + 'browsing_download_upload_bytes.dat')
+    browsing = np.loadtxt(DATA_PATH + 'browsig_download_upload_bytes.dat')
     mining = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
 
     # classify unknown data
