@@ -66,7 +66,7 @@ def classify_clustering(unknown_data_features, result="Mining"):
         x = NormTestPcaFeatures[i, :].reshape((1, nFea))
         label = kmeans.predict(x)
         testClass = 100 * probKMclass[label, :].flatten()
-        
+
         testClass = np.argsort(testClass)[-1]
 
         result_dict[Classes[testClass]] += 1
