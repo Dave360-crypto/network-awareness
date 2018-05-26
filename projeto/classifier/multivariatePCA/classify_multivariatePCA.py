@@ -9,9 +9,7 @@ import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
-
 def classify_multivaritePCA(unknown_data_features, result="Mining"):
-
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)
 
@@ -38,12 +36,11 @@ def classify_multivaritePCA(unknown_data_features, result="Mining"):
     for c in range(3):
         pClass = (oClass == c).flatten()
         covs.update({c: np.cov(pcaFeatures[pClass, :], rowvar=0)})
-    # print(covs)
+    #print(covs)
 
     testpcaFeatures = pca.transform(unknown_data_features)  # uses pca fitted above, only transforms test data
     # print(testpcaFeatures)
     nObsTest, nFea = testpcaFeatures.shape
-
 
     result_dict = {}
 
@@ -52,8 +49,11 @@ def classify_multivaritePCA(unknown_data_features, result="Mining"):
 
     for i in range(nObsTest):
         x = testpcaFeatures[i, :]
-        probs = np.array([multivariate_normal.pdf(x, means[0], covs[0]), multivariate_normal.pdf(x, means[1], covs[1]),
-                          multivariate_normal.pdf(x, means[2], covs[2])])
+        probs = np.array([multivariate_normal.pdf(x, means[0]), multivariate_normal.pdf(x, means[1]),
+                          multivariate_normal.pdf(x, means[2])])
+
+        #probs = np.array([multivariate_normal.pdf(x, means[0], covs[0]), multivariate_normal.pdf(x, means[1], covs[1]),
+        #                  multivariate_normal.pdf(x, means[2], covs[2])])
 
         testClass = np.argsort(probs)[-1]
 

@@ -13,8 +13,8 @@ if __name__ == '__main__':
     Classes = {0: 'YouTube', 1: 'Browsing', 2: 'Mining'}
 
     # loading the initial files...
-    yt = np.loadtxt(DATA_PATH + 'initialDataFiles/YouTube.dat')
-    browsing = np.loadtxt(DATA_PATH + 'initialDataFiles/Browsing.dat')
+    yt = np.loadtxt(DATA_PATH + 'youtube_download_upload_bytes.dat')
+    browsing = np.loadtxt(DATA_PATH + 'browsing_download_upload_bytes.dat')
     mining = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
 
     # classify unknown data
