@@ -1,39 +1,56 @@
 import numpy as np
+import pickle
+import os
+from colorama import Fore, Back, Style
+import operator
+
 
 from classifier.classify import distance, extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 
 
-def classify_distances(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
+
+
+def classify_distances(unknown_data_features, result="Mining"):
+    with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
+        allFeatures, Classes, oClass = pickle.load(f)
+
+    allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
+
     centroids = {}
     for c in range(3):
         pClass = (oClass == c).flatten()
         centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
-    print('All Features Centroids:\n', centroids)
 
-    testFeatures_yt, oClass_yt = extractFeatures(yt_test, Class=0)
-    testFeatures_browsing, oClass_browsing = extractFeatures(browsing_test, Class=1)
-    testFeatures_mining, oClass_mining = extractFeatures(mining_test, Class=2)
-    testFeatures = np.vstack((testFeatures_yt, testFeatures_browsing, testFeatures_mining))
+    result_dict = {}
 
-    testFeatures_ytS, oClass_yt = extractFeaturesSilence(yt_test, Class=0)
-    testFeatures_browsingS, oClass_browsing = extractFeaturesSilence(browsing_test, Class=1)
-    testFeatures_miningS, oClass_mining = extractFeaturesSilence(mining_test, Class=2)
-    testFeaturesS = np.vstack((testFeatures_ytS, testFeatures_browsingS, testFeatures_miningS))
+    for classes in Classes.values():
+        result_dict[classes] = 0
 
-    testFeatures_ytW, oClass_yt = extractFeaturesWavelet(yt_test, scales, Class=0)
-    testFeatures_browsingW, oClass_browsing = extractFeaturesWavelet(browsing_test, scales, Class=1)
-    testFeatures_miningW, oClass_mining = extractFeaturesWavelet(mining_test, scales, Class=2)
-    testFeaturesW = np.vstack((testFeatures_ytW, testFeatures_browsingW, testFeatures_miningW))
+    nObsTest, nFea = unknown_data_features.shape
 
-    alltestFeatures = np.hstack((testFeatures, testFeaturesS, testFeaturesW))
-
-    print('\n-- Classification based on Distances --')
-    nObsTest, nFea = alltestFeatures.shape
     for i in range(nObsTest):
-        x = alltestFeatures[i]
+        x = unknown_data_features[i]
         dists = [distance(x, centroids[0]), distance(x, centroids[1]), distance(x, centroids[2])]
         ndists = dists / np.sum(dists)
         testClass = np.argsort(dists)[0]
-        print(
-            'Obs: {:2}: Normalized Distances to Centroids: [{:.4f},{:.4f},{:.4f}] -> Classification: {} -> {}'.format(i,
-                                                                                                                      *ndists,testClass, Classes[testClass]))
+
+        result_dict[Classes[testClass]] += 1
+
+    print(Fore.BLUE + "\nClassification based on Distances:" + Style.RESET_ALL)
+
+    first = True
+
+    for key, value in sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value / nObsTest * 100)) + "%")
+
+        first = False
+
+    return {
+        "result": result
+    }
