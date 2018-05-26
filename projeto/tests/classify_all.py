@@ -1,6 +1,7 @@
 import numpy as np
 
 import sys, os
+
 sys.path.append("..")
 
 from classifier.classify import extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData
@@ -8,6 +9,7 @@ from classifier.vector.classify_vector import classify_vector
 from classifier.vectorPCA.classify_vectorPCA import classify_vectorPCA
 from classifier.multivariatePCA.classify_multivariatePCA import classify_multivaritePCA
 from classifier.distances.classify_distances import classify_distances
+from classifier.clustering.classify_clustering import classify_clustering
 
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "classifier/data/")
@@ -38,3 +40,6 @@ if __name__ == '__main__':
 
     # based on distances
     classify_distances(unknown_data_features)
+
+    #based on clustering (Kmeans)
+    classify_clustering(unknown_data_features)

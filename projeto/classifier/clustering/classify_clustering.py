@@ -4,8 +4,20 @@ from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+import pickle
+import os
+from colorama import Fore, Back, Style
+import operator
 
-def classify_clustering(allFeatures, Classes, oClass, yt_test, browsing_test, mining_test, scales):
+
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
+
+def classify_clustering(unknown_data_features, result="Mining"):
+    with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
+        allFeatures, Classes, oClass = pickle.load(f)
+
+    allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
+
     pca = PCA(n_components=3, svd_solver='full')
     pcaFeatures = pca.fit(allFeatures).transform(allFeatures)
 
@@ -13,48 +25,34 @@ def classify_clustering(allFeatures, Classes, oClass, yt_test, browsing_test, mi
     for c in range(3):
         pClass = (oClass == c).flatten()
         centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
-    print('All Features Centroids:\n', centroids)
-
-    testFeatures_yt, oClass_yt = extractFeatures(yt_test, Class=0)
-    testFeatures_browsing, oClass_browsing = extractFeatures(browsing_test, Class=1)
-    testFeatures_mining, oClass_mining = extractFeatures(mining_test, Class=2)
-    testFeatures = np.vstack((testFeatures_yt, testFeatures_browsing, testFeatures_mining))
-
-    testFeatures_ytS, oClass_yt = extractFeaturesSilence(yt_test, Class=0)
-    testFeatures_browsingS, oClass_browsing = extractFeaturesSilence(browsing_test, Class=1)
-    testFeatures_miningS, oClass_mining = extractFeaturesSilence(mining_test, Class=2)
-    testFeaturesS = np.vstack((testFeatures_ytS, testFeatures_browsingS, testFeatures_miningS))
-
-    testFeatures_ytW, oClass_yt = extractFeaturesWavelet(yt_test, scales, Class=0)
-    testFeatures_browsingW, oClass_browsing = extractFeaturesWavelet(browsing_test, scales, Class=1)
-    testFeatures_miningW, oClass_mining = extractFeaturesWavelet(mining_test, scales, Class=2)
-    testFeaturesW = np.vstack((testFeatures_ytW, testFeatures_browsingW, testFeatures_miningW))
-
-    alltestFeatures = np.hstack((testFeatures, testFeaturesS, testFeaturesW))
 
     scaler = StandardScaler()
     NormAllFeatures = scaler.fit_transform(allFeatures)
 
-    NormAllTestFeatures = scaler.fit_transform(alltestFeatures)
+    NormAllTestFeatures = scaler.fit_transform(unknown_data_features)
 
     pca = PCA(n_components=3, svd_solver='full')
     NormPcaFeatures = pca.fit(NormAllFeatures).transform(NormAllFeatures)
 
     NormTestPcaFeatures = pca.fit(NormAllTestFeatures).transform(NormAllTestFeatures)
 
-    print('\n-- Classification based on Clustering (Kmeans) --')
+    #print('\n-- Classification based on Clustering (Kmeans) --')
     # K-means assuming 3 clusters
     centroids = np.array([])
     for c in range(3):
         pClass = (oClass == c).flatten()
         centroids = np.append(centroids, np.mean(NormPcaFeatures[pClass, :], axis=0))
     centroids = centroids.reshape((3, 3))
-    print('PCA (pcaFeatures) Centroids:\n', centroids)
+
+    result_dict = {}
+
+    for classes in Classes.values():
+        result_dict[classes] = 0
 
     kmeans = KMeans(init=centroids, n_clusters=3)
     kmeans.fit(NormPcaFeatures)
     labels = kmeans.labels_
-    print('Labels:', labels)
+    #print('Labels:', labels)
 
     # Determines and quantifies the presence of each original class observation in each cluster
     KMclass = np.zeros((3, 3))
@@ -65,17 +63,33 @@ def classify_clustering(allFeatures, Classes, oClass, yt_test, browsing_test, mi
             KMclass[cluster, c] = np.sum(aux == c)
 
     probKMclass = KMclass / np.sum(KMclass, axis=1)[:, np.newaxis]
-    print(probKMclass)
     nObsTest, nFea = NormTestPcaFeatures.shape
     for i in range(nObsTest):
         x = NormTestPcaFeatures[i, :].reshape((1, nFea))
         label = kmeans.predict(x)
         testClass = 100 * probKMclass[label, :].flatten()
-        print('Obs: {:2}: Probabilities beeing in each class: [{:.2f}%,{:.2f}%,{:.2f}%]'.format(i, *testClass))
+
+        testClass = np.argsort(testClass)[-1]
+
+        result_dict[Classes[testClass]] += 1
 
 
-    # DBSCAN assuming a neighborhood maximum distance of 1e11
-    dbscan = DBSCAN(eps=10000)
-    dbscan.fit(pcaFeatures)
-    labels = dbscan.labels_
-    print('Labels:', labels)
+    print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
+
+    print(Fore.BLUE + "Classification based on Clustering (Kmeans):" + Style.RESET_ALL)
+
+    first = True
+
+    for key, value in sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True):
+        if first and key == result:
+            print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        elif first:
+            print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+        else:
+            print(key + ": " + str(int(value / nObsTest * 100)) + "%")
+
+        first = False
+
+    return {
+        "result": result
+    }
