@@ -1,9 +1,7 @@
 from sklearn.cluster import KMeans
 import numpy as np
-from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 import pickle
 import os
 from colorama import Fore, Back, Style
@@ -68,7 +66,7 @@ def classify_clustering(unknown_data_features, result="Mining"):
         x = NormTestPcaFeatures[i, :].reshape((1, nFea))
         label = kmeans.predict(x)
         testClass = 100 * probKMclass[label, :].flatten()
-
+        
         testClass = np.argsort(testClass)[-1]
 
         result_dict[Classes[testClass]] += 1

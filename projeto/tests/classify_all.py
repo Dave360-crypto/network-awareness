@@ -2,6 +2,8 @@ import numpy as np
 
 import sys, os
 
+from classifier.neuronalNetworks.classify_neuronalNetworks import classify_neuronalNetworks
+
 sys.path.append("..")
 
 from classifier.classify import extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData
@@ -43,3 +45,7 @@ if __name__ == '__main__':
 
     #based on clustering (Kmeans)
     classify_clustering(unknown_data_features)
+
+    # based on neural networks
+    classify_neuronalNetworks(unknown_data_features)
+
