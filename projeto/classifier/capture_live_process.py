@@ -4,7 +4,12 @@ import datetime
 import os, pickle
 
 from classifier.classify import breakData, extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+from classifier.clustering.classify_clustering import classify_clustering
 from classifier.distances.classify_distances import classify_distances
+from classifier.multivariatePCA.classify_multivariatePCA import classify_multivaritePCA
+from classifier.neuronalNetworks.classify_neuronalNetworks import classify_neuronalNetworks
+from classifier.vector.classify_vector import classify_vector
+from classifier.vectorPCA.classify_vectorPCA import classify_vectorPCA
 
 upload_counter = 0
 upload_bytes_counter = 0
@@ -103,9 +108,6 @@ if lines_download < lines_upload:
 else:
     size_bytes = lines_upload
 
-print("down:", download_bytes)
-print("up:", upload_bytes)
-
 for i in range(0, size_bytes):
     download_upload_bytes.append([download_bytes[i], upload_bytes[i]])
 
@@ -118,5 +120,20 @@ features_dataS = extractFeaturesSilence(break_data)[0]
 features_dataW = extractFeaturesWavelet(break_data)[0]
 unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
 
-# distances
+# based on vector
+classify_vector(unknown_data_features)
+
+# based on vector PCA
+classify_vectorPCA(unknown_data_features)
+
+# based on multivariate PCA
+classify_multivaritePCA(unknown_data_features)
+
+# based on distances
 classify_distances(unknown_data_features)
+
+#based on clustering (Kmeans)
+classify_clustering(unknown_data_features)
+
+# based on neural networks
+classify_neuronalNetworks(unknown_data_features)

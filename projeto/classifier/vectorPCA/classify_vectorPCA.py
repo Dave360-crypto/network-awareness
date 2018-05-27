@@ -8,7 +8,7 @@ import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
-def classify_vectorPCA(unknown_data_features, result="Mining"):
+def classify_vectorPCA(unknown_data_features, result="YouTube"):
 
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)

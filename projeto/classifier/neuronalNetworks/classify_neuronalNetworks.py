@@ -11,7 +11,7 @@ import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
-def classify_neuronalNetworks(unknown_data_features, result="Mining"):
+def classify_neuronalNetworks(unknown_data_features, result="YouTube"):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)
 
@@ -21,7 +21,6 @@ def classify_neuronalNetworks(unknown_data_features, result="Mining"):
         centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
 
     allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
-
 
     scaler = StandardScaler()
     NormAllFeatures = scaler.fit_transform(allFeatures)
@@ -45,6 +44,7 @@ def classify_neuronalNetworks(unknown_data_features, result="Mining"):
     clf = MLPClassifier(solver='lbfgs', alpha=alpha, hidden_layer_sizes=(100,), max_iter=max_iter)
     clf.fit(NormPcaFeatures, oClass)
     LT = clf.predict(NormTestPcaFeatures)
+
     #print('class (from test PCA):', LT)
 
     nObsTest, nFea = NormTestPcaFeatures.shape
