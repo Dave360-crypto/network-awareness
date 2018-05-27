@@ -37,6 +37,8 @@ def classify_distances(unknown_data_features, result="Mining", printing=False):
 
         result_dict[Classes[testClass]] += 1
 
+    result_dict = sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True)
+
     if printing:
         print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
 
@@ -44,7 +46,7 @@ def classify_distances(unknown_data_features, result="Mining", printing=False):
 
         first = True
 
-        for key, value in sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True):
+        for key, value in result_dict:
             if first and key == result:
                 print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
             elif first:
@@ -54,4 +56,4 @@ def classify_distances(unknown_data_features, result="Mining", printing=False):
 
             first = False
 
-    return result
+    return result_dict

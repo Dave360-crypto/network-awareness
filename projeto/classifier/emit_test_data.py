@@ -15,9 +15,11 @@ queue_name = "packets"
 
 rabbitMQ.setup_queue(queue_name)
 
-for pkt in packets:
+for idx, pkt in packets.items():
     if "tcp.dstport" not in pkt:
         pkt["tcp.dstport"] = 443  # example YouTube
+
+    pkt["sniff_time"] = str(pkt["sniff_time"])
 
     rabbitMQ.publish(queue_name, json.dumps(pkt))
 
