@@ -11,7 +11,7 @@ from classifier.utils.classify import distance
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
 
-def classify_distances(unknown_data_features, result="Mining"):
+def classify_distances(unknown_data_features, result="Mining", printing=False):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)
 
@@ -37,22 +37,23 @@ def classify_distances(unknown_data_features, result="Mining"):
 
         result_dict[Classes[testClass]] += 1
 
-    print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
+    result_dict = sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True)
 
-    print(Fore.BLUE + "Classification based on Distances:" + Style.RESET_ALL)
+    if printing:
+        print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
 
-    first = True
+        print(Fore.BLUE + "Classification based on Distances:" + Style.RESET_ALL)
 
-    for key, value in sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True):
-        if first and key == result:
-            print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
-        elif first:
-            print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
-        else:
-            print(key + ": " + str(int(value / nObsTest * 100)) + "%")
+        first = True
 
-        first = False
+        for key, value in result_dict:
+            if first and key == result:
+                print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+            elif first:
+                print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+            else:
+                print(key + ": " + str(int(value / nObsTest * 100)) + "%")
 
-    return {
-        "result": result
-    }
+            first = False
+
+    return result_dict
