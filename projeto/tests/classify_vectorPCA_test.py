@@ -26,4 +26,4 @@ if __name__ == '__main__':
     unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
-    classify_vectorPCA(unknown_data_features)
+    classify_vectorPCA(unknown_data_features, printing=True)

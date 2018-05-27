@@ -5,7 +5,7 @@ import os
 
 sys.path.append("..")
 
-from classifier.classify import breakData, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence
+from classifier.utils.classify import breakData, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence
 from classifier.distances.classify_distances import classify_distances
 
 
@@ -26,4 +26,4 @@ if __name__ == '__main__':
     unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
-    classify_distances(unknown_data_features)
+    classify_distances(unknown_data_features, printing=True)

@@ -3,7 +3,7 @@ import numpy as np
 import sys, os
 sys.path.append("..")
 
-from classifier.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, \
+from classifier.utils.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, \
     breakData
 from classifier.neuronalNetworks.classify_neuronalNetworks import classify_neuronalNetworks
 
@@ -25,4 +25,4 @@ if __name__ == '__main__':
     unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
-    classify_neuronalNetworks(unknown_data_features)
+    classify_neuronalNetworks(unknown_data_features, printing=True)

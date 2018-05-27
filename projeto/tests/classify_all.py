@@ -32,20 +32,20 @@ if __name__ == '__main__':
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
     # based on vector
-    classify_vector(unknown_data_features)
+    classify_vector(unknown_data_features, printing=True)
 
     # based on vector PCA
-    classify_vectorPCA(unknown_data_features)
+    classify_vectorPCA(unknown_data_features, printing=True)
 
     # based on multivariate PCA
-    classify_multivaritePCA(unknown_data_features)
+    classify_multivaritePCA(unknown_data_features, printing=True)
 
     # based on distances
-    classify_distances(unknown_data_features)
+    classify_distances(unknown_data_features, printing=True)
 
     #based on clustering (Kmeans)
-    classify_clustering(unknown_data_features)
+    classify_clustering(unknown_data_features, printing=True)
 
     # based on neural networks
-    classify_neuronalNetworks(unknown_data_features)
+    classify_neuronalNetworks(unknown_data_features, printing=True)
 
