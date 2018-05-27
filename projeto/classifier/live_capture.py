@@ -34,9 +34,7 @@ current_host_name = socket.gethostbyname(socket.gethostname())
 
 # WINDOW
 
-MIN_WINDOW = 20
-MAX_WINDOW = 20
-MAX_WINDOW_DATA = MAX_WINDOW * 3
+WINDOW = 120
 
 
 def classify(pkt):
@@ -113,13 +111,11 @@ def classify(pkt):
     """
     When the size_bytes get's some value it will discard  old bytes and only X most recent bytes will be take in account
     """
-    if unknown_data_bytes_counter.shape[0] > MAX_WINDOW_DATA:
-        unknown_data_bytes_counter = unknown_data_bytes_counter[unknown_data_bytes_counter.shape[0]-MAX_WINDOW_DATA:, :]
+    #if unknown_data_bytes_counter.shape[0] > MAX_WINDOW_DATA:
+    #    unknown_data_bytes_counter = unknown_data_bytes_counter[unknown_data_bytes_counter.shape[0]-MAX_WINDOW_DATA:, :]
 
-    oWnd = min(int(unknown_data_bytes_counter.shape[0] / 3), MAX_WINDOW)
-
-    if oWnd >= MIN_WINDOW:
-        break_data = breakData(unknown_data_bytes_counter, oWnd=oWnd)
+    if unknown_data_bytes_counter.shape[0] >= WINDOW:
+        break_data = breakData(unknown_data_bytes_counter, oWnd=WINDOW)
 
         features_data = extractFeatures(break_data)[0]
         features_dataS = extractFeaturesSilence(break_data)[0]
@@ -129,10 +125,10 @@ def classify(pkt):
         # based on distances
         result = classify_distances(unknown_data_features, result="YouTube")
 
-        sys.stdout.write("\rType: {} | Window size: {}".format(result[0][0], oWnd))
+        sys.stdout.write("\rType: {} | Data size: {}".format(result[0][0], unknown_data_bytes_counter.shape[0]))
         sys.stdout.flush()
     else:
-        sys.stdout.write("\rWait a moment, we are recording data... | Window size: {}".format(oWnd))
+        sys.stdout.write("\rWait a moment, we are recording data... | Data size: {}".format(unknown_data_bytes_counter.shape[0]))
         sys.stdout.flush()
 
 

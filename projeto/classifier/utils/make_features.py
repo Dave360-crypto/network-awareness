@@ -2,7 +2,7 @@ import numpy as np
 import os, sys
 import pickle
 
-from classifier.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence
+from classifier.utils.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence
 
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
