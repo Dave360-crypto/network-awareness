@@ -10,7 +10,8 @@ import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
-def classify_neuronalNetworks(unknown_data_features, result="Mining"):
+
+def classify_neuronalNetworks(unknown_data_features, result="Mining", printing=False):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)
 
@@ -36,39 +37,32 @@ def classify_neuronalNetworks(unknown_data_features, result="Mining"):
     for classes in Classes.values():
         result_dict[classes] = 0
 
-    #print('\n-- Classification based on Neural Networks --')
-
     alpha = 1
     max_iter = 100000
     clf = MLPClassifier(solver='lbfgs', alpha=alpha, hidden_layer_sizes=(100,), max_iter=max_iter)
     clf.fit(NormPcaFeatures, oClass)
     LT = clf.predict(NormTestPcaFeatures)
 
-    #print('class (from test PCA):', LT)
-
     nObsTest, nFea = NormTestPcaFeatures.shape
-    for i in range(nObsTest):
-        #print('Obs: {:2}: Classification->{}'.format(i, Classes[LT[i]]))
 
+    for i in range(nObsTest):
         result_dict[Classes[LT[i]]] += 1
 
+    if printing:
+        print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
 
-    print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
+        print(Fore.BLUE + "Classification based on Neural Networks:" + Style.RESET_ALL)
 
-    print(Fore.BLUE + "Classification based on Neural Networks:" + Style.RESET_ALL)
+        first = True
 
-    first = True
+        for key, value in sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True):
+            if first and key == result:
+                print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+            elif first:
+                print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
+            else:
+                print(key + ": " + str(int(value / nObsTest * 100)) + "%")
 
-    for key, value in sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True):
-        if first and key == result:
-            print(Fore.GREEN + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
-        elif first:
-            print(Fore.RED + key + ": " + str(int(value / nObsTest * 100)) + "%" + Style.RESET_ALL)
-        else:
-            print(key + ": " + str(int(value / nObsTest * 100)) + "%")
+            first = False
 
-        first = False
-
-    return {
-        "result": result
-    }
+    return result

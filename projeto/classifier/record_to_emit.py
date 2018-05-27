@@ -1,5 +1,6 @@
 import pyshark
-import pickle, os
+import pickle
+import os
 
 capture = pyshark.LiveCapture(interface='en0', bpf_filter='tcp port 443', )
 
@@ -13,6 +14,7 @@ def print_callback(pkt):
 
     pkt = {
         "ip.src": str(pkt.ip.src),
+        "tcp.dstport": str(pkt.tcp.dstport),
         "length": str(pkt.length),
         "tcp.srcport": str(pkt.tcp.srcport),
         "sniff_time": pkt.sniff_time

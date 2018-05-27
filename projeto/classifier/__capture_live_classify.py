@@ -1,7 +1,8 @@
 import numpy as np
-import os, pickle
+import os
+import pickle
 
-from classifier.classify import breakData, extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+from classifier.utils.classify import breakData, extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 from classifier.clustering.classify_clustering import classify_clustering
 from classifier.distances.classify_distances import classify_distances
 from classifier.multivariatePCA.classify_multivariatePCA import classify_multivaritePCA
