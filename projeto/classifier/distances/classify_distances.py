@@ -5,13 +5,13 @@ from colorama import Fore, Back, Style
 import operator
 
 
-from classifier.classify import distance, extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
+from classifier.utils.classify import distance
 
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
 
-def classify_distances(unknown_data_features, result="YouTube"):
+def classify_distances(unknown_data_features, result="Mining"):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)
 

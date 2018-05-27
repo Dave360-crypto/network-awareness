@@ -3,14 +3,6 @@ import socket
 import datetime
 import os, pickle
 
-from classifier.classify import breakData, extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
-from classifier.clustering.classify_clustering import classify_clustering
-from classifier.distances.classify_distances import classify_distances
-from classifier.multivariatePCA.classify_multivariatePCA import classify_multivaritePCA
-from classifier.neuronalNetworks.classify_neuronalNetworks import classify_neuronalNetworks
-from classifier.vector.classify_vector import classify_vector
-from classifier.vectorPCA.classify_vectorPCA import classify_vectorPCA
-
 upload_counter = 0
 upload_bytes_counter = 0
 download_bytes_counter = 0
@@ -113,27 +105,11 @@ for i in range(0, size_bytes):
 
 unknown_data = np.array(download_upload_bytes).reshape(size_bytes, 2)
 
-break_data = breakData(unknown_data)
+# save the data into file
 
-features_data = extractFeatures(break_data)[0]
-features_dataS = extractFeaturesSilence(break_data)[0]
-features_dataW = extractFeaturesWavelet(break_data)[0]
-unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
+DATA_PATH = os.path.join(os.path.dirname(__file__), "data/")
 
-# based on vector
-classify_vector(unknown_data_features)
+with open(DATA_PATH + "bin/live_data_processed.bin", 'wb') as f:
+    pickle.dump(unknown_data, f)
 
-# based on vector PCA
-classify_vectorPCA(unknown_data_features)
-
-# based on multivariate PCA
-classify_multivaritePCA(unknown_data_features)
-
-# based on distances
-classify_distances(unknown_data_features)
-
-#based on clustering (Kmeans)
-classify_clustering(unknown_data_features)
-
-# based on neural networks
-classify_neuronalNetworks(unknown_data_features)
+f.close()

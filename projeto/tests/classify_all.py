@@ -6,7 +6,7 @@ from classifier.neuronalNetworks.classify_neuronalNetworks import classify_neuro
 
 sys.path.append("..")
 
-from classifier.classify import extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData
+from classifier.utils.classify import extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData
 from classifier.vector.classify_vector import classify_vector
 from classifier.vectorPCA.classify_vectorPCA import classify_vectorPCA
 from classifier.multivariatePCA.classify_multivariatePCA import classify_multivaritePCA

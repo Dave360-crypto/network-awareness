@@ -2,7 +2,6 @@ from sklearn.neural_network import MLPClassifier
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from classifier.classify import extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
 import pickle
 import os
 from colorama import Fore, Back, Style
@@ -11,7 +10,7 @@ import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
-def classify_neuronalNetworks(unknown_data_features, result="YouTube"):
+def classify_neuronalNetworks(unknown_data_features, result="Mining"):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)
 

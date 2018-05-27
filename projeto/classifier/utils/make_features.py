@@ -1,11 +1,11 @@
 import numpy as np
-import os
+import os, sys
 import pickle
 
-from classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData
+from classifier.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence
 
 
-DATA_PATH = os.path.join(os.path.dirname(__file__), "data/")
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
 
 if __name__ == '__main__':
@@ -16,18 +16,6 @@ if __name__ == '__main__':
     yt = np.loadtxt(DATA_PATH + 'youtube_download_upload_bytes.dat')
     browsing = np.loadtxt(DATA_PATH + 'browsing_download_upload_bytes.dat')
     mining = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
-
-    # classify unknown data
-    unknown_data = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
-
-    # break data
-    break_data = breakData(unknown_data)
-
-    # extract features of the unknown break data
-    features_data = extractFeatures(break_data)[0]
-    features_dataS = extractFeaturesSilence(break_data)[0]
-    features_dataW = extractFeaturesWavelet(break_data)[0]
-    unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
     yt_train, yt_test = breakTrainTest(yt)

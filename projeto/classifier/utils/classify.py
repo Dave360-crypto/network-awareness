@@ -1,6 +1,6 @@
 import numpy as np
 import warnings
-from classifier import scalogram
+from classifier.utils import scalogram
 
 warnings.filterwarnings('ignore')
 

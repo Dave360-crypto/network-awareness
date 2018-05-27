@@ -8,7 +8,7 @@ import operator
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
 
-def classify_vector(unknown_data_features, result="YouTube"):
+def classify_vector(unknown_data_features, result="Mining"):
     """
 
     :param allFeatures:
