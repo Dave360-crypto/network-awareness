@@ -16,13 +16,14 @@ from classifier.clustering.classify_clustering import classify_clustering
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "classifier/data/")
 
+WINDOW = 120
 
 if __name__ == '__main__':
     # classify unknown data
     unknown_data = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
 
     # break data
-    break_data = breakData(unknown_data)
+    break_data = breakData(unknown_data, oWnd=WINDOW)
 
     # extract features of the unknown break data
     features_data = extractFeatures(break_data)[0]

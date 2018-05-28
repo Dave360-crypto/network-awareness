@@ -7,6 +7,7 @@ from classifier.utils.classify import breakTrainTest, extractFeatures, extractFe
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
+WINDOW = 120
 
 if __name__ == '__main__':
     # classes
@@ -18,9 +19,9 @@ if __name__ == '__main__':
     mining = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
-    yt_train, yt_test = breakTrainTest(yt)
-    browsing_train, browsing_test = breakTrainTest(browsing)
-    mining_train, mining_test = breakTrainTest(mining)
+    yt_train, yt_test = breakTrainTest(yt, oWnd=WINDOW)
+    browsing_train, browsing_test = breakTrainTest(browsing, oWnd=WINDOW)
+    mining_train, mining_test = breakTrainTest(mining, oWnd=WINDOW)
 
     features_yt, oClass_yt = extractFeatures(yt_train, Class=0)
     features_browsing, oClass_browsing = extractFeatures(browsing_train, Class=1)
