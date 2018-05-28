@@ -43,9 +43,12 @@ def breakData(data, oWnd=300):
     :param oWnd: window size
     :return: data without zeros reshaped in obs wnd and cols
     """
+    wndDivision = 6
+    smallWnd = int(oWnd / wndDivision)
+
     nSamp, nCols = data.shape
-    nObs = int(nSamp / oWnd)
-    data_obs = data[:nObs * oWnd].reshape((nObs, oWnd, nCols))
+    nObs = int(nSamp / smallWnd)
+    data_obs = data[:nObs * smallWnd].reshape((nObs, smallWnd, nCols))
 
     data_withoutzeros = []
 
@@ -60,7 +63,7 @@ def breakData(data, oWnd=300):
 
     nObs, oWnd, nCols = data_withoutzeros.shape
 
-    data_withoutzeros = data_withoutzeros[:nObs * oWnd].reshape((nObs, oWnd, nCols))
+    data_withoutzeros = data_withoutzeros[:nObs * smallWnd].reshape((nObs, smallWnd, nCols))
 
     return data_withoutzeros
 

@@ -111,8 +111,8 @@ def classify(pkt):
     """
     When the size_bytes get's some value it will discard  old bytes and only X most recent bytes will be take in account
     """
-    #if unknown_data_bytes_counter.shape[0] > MAX_WINDOW_DATA:
-    #    unknown_data_bytes_counter = unknown_data_bytes_counter[unknown_data_bytes_counter.shape[0]-MAX_WINDOW_DATA:, :]
+    if unknown_data_bytes_counter.shape[0] > WINDOW:# 121-120: 1: =>120, 2
+        unknown_data_bytes_counter = unknown_data_bytes_counter[unknown_data_bytes_counter.shape[0]-WINDOW:, :]
 
     if unknown_data_bytes_counter.shape[0] >= WINDOW:
         break_data = breakData(unknown_data_bytes_counter, oWnd=WINDOW)
