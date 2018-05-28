@@ -1,6 +1,7 @@
 import numpy as np
 import warnings
 from classifier.utils import scalogram
+from scipy import stats
 
 warnings.filterwarnings('ignore')
 
@@ -67,7 +68,6 @@ def breakData(data, oWnd=300):
 
     return data_withoutzeros
 
-
 def extractFeatures(data, Class=0):
     features = []
     #print(data)
@@ -75,15 +75,15 @@ def extractFeatures(data, Class=0):
     oClass = np.ones((nObs, 1)) * Class
     for i in range(nObs):
         M1 = np.mean(data[i, :, :], axis=0)
-        # Md1=np.median(data[i,:,:],axis=0)
+        Md1=np.median(data[i,:,:],axis=0)
         Std1 = np.std(data[i, :, :], axis=0)
-        # S1=stats.skew(data[i,:,:])
-        # K1=stats.kurtosis(data[i,:,:])
+        S1=stats.skew(data[i,:,:])
+        K1=stats.kurtosis(data[i,:,:])
         p = [75, 90, 95]
         Pr1 = np.array(np.percentile(data[i, :, :], p, axis=0)).T.flatten()
 
-        # faux=np.hstack((M1,Md1,Std1,S1,K1,Pr1))
-        faux = np.hstack((M1, Std1, Pr1))
+        faux=np.hstack((M1,Md1,Std1,S1,K1,Pr1))
+        #faux = np.hstack((M1, Std1, Pr1))
         features.append(faux)
 
     return (np.array(features), oClass)
