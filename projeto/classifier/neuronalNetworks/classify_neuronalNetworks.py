@@ -65,4 +65,4 @@ def classify_neuronalNetworks(unknown_data_features, result="Mining", printing=F
 
             first = False
 
-    return result
+    return sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True), nObsTest

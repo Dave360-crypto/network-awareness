@@ -76,17 +76,16 @@
                         <div class="card">
 
                             <div class="header">
-                                <h4 class="title">Email Statistics</h4>
-                                <p class="category">Last Campaign Performance</p>
+                                <h4 class="title">Classification</h4>
+                                <p class="category">Based on Neuronal Networks</p>
                             </div>
                             <div class="content">
                                 <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
 
                                 <div class="footer">
                                     <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Bounce
-                                        <i class="fa fa-circle text-warning"></i> Unsubscribe
+                                        <i class="fa fa-circle text-info"></i> Mining
+                                        <i class="fa fa-circle text-danger"></i> Others
                                     </div>
                                     <hr>
                                     <div class="stats">
@@ -107,9 +106,9 @@
                                 <div id="chartHours" class="ct-chart"></div>
                                 <div class="footer">
                                     <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Open
-                                        <i class="fa fa-circle text-danger"></i> Click
-                                        <i class="fa fa-circle text-warning"></i> Click Second Time
+                                        <i class="fa fa-circle text-info"></i> Mining
+                                        <i class="fa fa-circle text-danger"></i> YouTube
+                                        <i class="fa fa-circle text-warning"></i> Browsing
                                     </div>
                                     <hr>
                                     <div class="stats">
@@ -150,7 +149,6 @@
             </div>
         </div>
 
-
         <footer class="footer social-area">
             <span style="padding-left: 20px">Network Awareness 2018 . University of Aveiro.</span>
         </footer>
@@ -179,11 +177,11 @@
 
 	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
 	<script src="assets/js/demo.js"></script>
+    <script src="assets/js/dashboard.js"></script>
 
-	<script type="text/javascript">
+    <script type="text/javascript">
     	$(document).ready(function(){
-        	demo.initChartist();
+        	dashboard.initPieChart();
     	});
 	</script>
-
 </html>

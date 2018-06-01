@@ -5,11 +5,11 @@ from colorama import Fore, Back, Style
 import operator
 
 
+
 from classifier.utils.classify import distance
 
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
-
 
 def classify_distances(unknown_data_features, result="Mining", printing=False):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
@@ -56,4 +56,5 @@ def classify_distances(unknown_data_features, result="Mining", printing=False):
 
             first = False
 
-    return result_dict
+
+    return result_dict, nObsTest

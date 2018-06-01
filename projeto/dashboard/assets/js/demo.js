@@ -62,7 +62,7 @@ demo = {
         };
 
         var responsiveSales = [
-          ['screen and (max-width: 640px)', {
+          ['screen and (max-width1: 640px)', {
             axisX: {
               labelInterpolationFnc: function (value) {
                 return value[0];
