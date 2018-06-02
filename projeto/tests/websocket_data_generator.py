@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
             await websocket.send(json.dumps([mining, others]))
 
-            time.sleep(0.5)
+            time.sleep(1)
 
     start_server = websockets.serve(data, '127.0.0.1', 1234)
 

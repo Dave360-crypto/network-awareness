@@ -30,6 +30,11 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
 
+
+
+
+
+
 </head>
 <body>
 
@@ -50,18 +55,6 @@
                     <a href="dashboard.html">
                         <i class="pe-7s-graph"></i>
                         <p>Dashboard</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="table.html">
-                        <i class="pe-7s-note2"></i>
-                        <p>Table List</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="notifications.html">
-                        <i class="pe-7s-bell"></i>
-                        <p>Notifications</p>
                     </a>
                 </li>
             </ul>
@@ -99,47 +92,19 @@
                     <div class="col-md-8">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Users Behavior</h4>
-                                <p class="category">24 Hours performance</p>
+                                <h4 class="title">Classified Behavior</h4>
+                                <p class="category">Historic</p>
                             </div>
                             <div class="content">
-                                <div id="chartHours" class="ct-chart"></div>
+                                <div id="live" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
                                 <div class="footer">
                                     <div class="legend">
                                         <i class="fa fa-circle text-info"></i> Mining
-                                        <i class="fa fa-circle text-danger"></i> YouTube
-                                        <i class="fa fa-circle text-warning"></i> Browsing
+                                        <i class="fa fa-circle text-danger"></i> Others
                                     </div>
                                     <hr>
                                     <div class="stats">
                                         <i class="fa fa-history"></i> Updated 3 minutes ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title">2014 Sales</h4>
-                                <p class="category">All products including Taxes</p>
-                            </div>
-                            <div class="content">
-                                <div id="chartActivity" class="ct-chart"></div>
-
-                                <div class="footer">
-                                    <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Tesla Model S
-                                        <i class="fa fa-circle text-danger"></i> BMW 5 Series
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-check"></i> Data information certified
                                     </div>
                                 </div>
                             </div>
@@ -158,6 +123,10 @@
 
 
 </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
 
     <!--   Core JS Files   -->
     <script src="assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
@@ -184,4 +153,7 @@
         	dashboard.initPieChart();
     	});
 	</script>
+
+    <script src="assets/js/LineChart.js"></script>
+
 </html>

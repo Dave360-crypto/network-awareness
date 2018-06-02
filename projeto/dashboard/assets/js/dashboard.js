@@ -1,10 +1,8 @@
 var dashboard = dashboard || {};
-
+var ws = new WebSocket("ws://127.0.0.1:1234/");
+var probs;
 
 dashboard.initPieChart = function () {
-
-    var ws = new WebSocket("ws://127.0.0.1:1234/");
-    var probs;
 
     ws.onmessage = function (event) {
         probs = JSON.parse(event.data);
