@@ -1,7 +1,7 @@
 import numpy as np
+
 import sys, os
-import asyncio
-import websockets, json
+
 from classifier.neuronalNetworks.classify_neuronalNetworks import classify_neuronalNetworks
 
 sys.path.append("..")
@@ -48,23 +48,5 @@ if __name__ == '__main__':
     classify_clustering(unknown_data_features, printing=True)
 
     # based on neural networks
-    classify_neuronalNetworks, nObsTest = classify_neuronalNetworks(unknown_data_features, printing=True)
-
-    list = []
-    async def data(websocket, path):
-        for key, value in classify_neuronalNetworks:
-            list.append(str(int(value / nObsTest * 100)))
-
-        await websocket.send(json.dumps(list))
-
-    start_server = websockets.serve(data, '127.0.0.1', 1234)
-
-    asyncio.get_event_loop().run_until_complete(start_server)
-    asyncio.get_event_loop().run_forever()
-
-
-
-
-
-
+    classify_neuronalNetworks(unknown_data_features, printing=True)
 

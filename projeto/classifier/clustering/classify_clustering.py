@@ -17,11 +17,11 @@ def classify_clustering(unknown_data_features, result="Mining", printing=False):
 
     allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
 
-    pca = PCA(n_components=2, svd_solver='full')
+    pca = PCA(n_components=3, svd_solver='full')
     pcaFeatures = pca.fit(allFeatures).transform(allFeatures)
 
     centroids = {}
-    for c in range(2):
+    for c in range(3):
         pClass = (oClass == c).flatten()
         centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
 
@@ -30,7 +30,7 @@ def classify_clustering(unknown_data_features, result="Mining", printing=False):
 
     NormAllTestFeatures = scaler.fit_transform(unknown_data_features)
 
-    pca = PCA(n_components=2, svd_solver='full')
+    pca = PCA(n_components=3, svd_solver='full')
     NormPcaFeatures = pca.fit(NormAllFeatures).transform(NormAllFeatures)
 
     NormTestPcaFeatures = pca.fit(NormAllTestFeatures).transform(NormAllTestFeatures)
@@ -38,28 +38,28 @@ def classify_clustering(unknown_data_features, result="Mining", printing=False):
     # K-means assuming 3 clusters
     centroids = np.array([])
 
-    for c in range(2):
+    for c in range(3):
         pClass = (oClass == c).flatten()
         centroids = np.append(centroids, np.mean(NormPcaFeatures[pClass, :], axis=0))
 
-    centroids = centroids.reshape((2, 2))
+    centroids = centroids.reshape((3, 3))
 
     result_dict = {}
 
     for classes in Classes.values():
         result_dict[classes] = 0
 
-    kmeans = KMeans(init=centroids, n_clusters=2)
+    kmeans = KMeans(init=centroids, n_clusters=3)
     kmeans.fit(NormPcaFeatures)
     labels = kmeans.labels_
 
     # Determines and quantifies the presence of each original class observation in each cluster
-    KMclass = np.zeros((2, 2))
+    KMclass = np.zeros((3, 3))
 
-    for cluster in range(2):
+    for cluster in range(3):
         p = (labels == cluster)
         aux = oClass[p]
-        for c in range(2):
+        for c in range(3):
             KMclass[cluster, c] = np.sum(aux == c)
 
     probKMclass = KMclass / np.sum(KMclass, axis=1)[:, np.newaxis]

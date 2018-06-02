@@ -1,3 +1,4 @@
 pyshark
 colorama
 pika
+websockets

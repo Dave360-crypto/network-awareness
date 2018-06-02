@@ -16,21 +16,21 @@ def classify_multivaritePCA(unknown_data_features, result="Mining", printing=Fal
 
     allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
 
-    pca = PCA(n_components=2, svd_solver='full')
+    pca = PCA(n_components=3, svd_solver='full')
     pcaFeatures = pca.fit(allFeatures).transform(allFeatures)
 
     centroids = {}
-    for c in range(2):
+    for c in range(3):
         pClass = (oClass == c).flatten()
         centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
 
     means = {}
-    for c in range(2):
+    for c in range(3):
         pClass = (oClass == c).flatten()
         means.update({c: np.mean(pcaFeatures[pClass, :], axis=0)})
 
     covs = {}
-    for c in range(2):
+    for c in range(3):
         pClass = (oClass == c).flatten()
         covs.update({c: np.cov(pcaFeatures[pClass, :], rowvar=0)})
 
@@ -44,7 +44,11 @@ def classify_multivaritePCA(unknown_data_features, result="Mining", printing=Fal
 
     for i in range(nObsTest):
         x = testpcaFeatures[i, :]
-        probs = np.array([multivariate_normal.pdf(x, means[0], covs[0]), multivariate_normal.pdf(x, means[1], covs[1])])
+        probs = np.array([multivariate_normal.pdf(x, means[0]), multivariate_normal.pdf(x, means[1]),
+                          multivariate_normal.pdf(x, means[2])])
+
+        #probs = np.array([multivariate_normal.pdf(x, means[0], covs[0]), multivariate_normal.pdf(x, means[1], covs[1]),
+        #                  multivariate_normal.pdf(x, means[2], covs[2])])
 
         testClass = np.argsort(probs)[-1]
 
