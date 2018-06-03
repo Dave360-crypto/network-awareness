@@ -52,7 +52,7 @@
 
             <ul class="nav">
                 <li class="active">
-                    <a href="dashboard.html">
+                    <a href="#">
                         <i class="pe-7s-graph"></i>
                         <p>Dashboard</p>
                     </a>
@@ -67,24 +67,13 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">
-
                             <div class="header">
-                                <h4 class="title">Classification</h4>
-                                <p class="category">Based on Neuronal Networks</p>
+                                <h4 class="title">Live Classification</h4>
                             </div>
-                            <div class="content">
-                                <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-
-                                <div class="footer">
-                                    <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Mining
-                                        <i class="fa fa-circle text-danger"></i> Others
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
-                                    </div>
-                                </div>
+                            <div class="content text-center" style="vertical-align: middle; min-height: 387px">
+                                <br/><br/><br/><br/><br/><br/>
+                                <span class="btn btn-lg btn-danger text-uppercase" style="display: none" id="foundMining">Mining</span>
+                                <span class="btn btn-lg btn-success text-uppercase" style="display: none" id="foundSafe">Safe</span>
                             </div>
                         </div>
                     </div>
@@ -99,12 +88,8 @@
                                 <div id="live" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
                                 <div class="footer">
                                     <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Mining
-                                        <i class="fa fa-circle text-danger"></i> Others
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-history"></i> Updated 3 minutes ago
+                                        <i class="fa fa-circle text-danger"></i> Mining
+                                        <i class="fa fa-circle text-success"></i> Others
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +102,6 @@
         <footer class="footer social-area">
             <span style="padding-left: 20px">Network Awareness 2018 . University of Aveiro.</span>
         </footer>
-
     </div>
 </div>
 
@@ -141,15 +125,6 @@
 	<script src="assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
 
 	<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
-	<script src="assets/js/demo.js"></script>
     <script src="assets/js/dashboard.js"></script>
-
-    <script type="text/javascript">
-    	$(document).ready(function(){
-        	dashboard.initPieChart();
-    	});
-	</script>
-
-    <script src="assets/js/LineChart.js"></script>
 
 </html>
