@@ -11,9 +11,13 @@ WINDOW = 120
 
 if __name__ == '__main__':
     # classes
-    Classes = {0: 'Mining'}
+    Classes = {0: 'Browsing', 1: 'HTTP', 2: 'Mining Cryptonight', 3: 'Netflix',
+               4: 'RTP Live Stream', 5: 'Spotify'}
 
     # loading the initial files...
+    with open(DATA_PATH + "browsing_comm_record.bin", 'rb') as f:
+        comm_up_down, upload_ports, download_ports = pickle.load(f)
+
     yt = np.loadtxt(DATA_PATH + 'youtube_download_upload_bytes.dat')
     browsing = np.loadtxt(DATA_PATH + 'browsing_download_upload_bytes.dat')
     mining = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')

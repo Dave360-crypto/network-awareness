@@ -60,19 +60,19 @@ def arrived_pkt_callback(pkt):
             upload_bytes_counter += int(pkt.length)
 
             # contar os portos de origem
-            if pkt.tcp.srcport in upload_ports:
-                upload_ports[pkt.tcp.srcport] += 1
+            if str(pkt.tcp.srcport) in upload_ports:
+                upload_ports[str(pkt.tcp.srcport)] += 1
             else:
-                upload_ports[pkt.tcp.srcport] = 1
+                upload_ports[str(pkt.tcp.srcport)] = 1
 
         else:
             download_bytes_counter += int(pkt.length)
 
             # contar os portos de origem
-            if pkt.tcp.srcport in download_ports:
-                download_ports[pkt.tcp.srcport] += 1
+            if str(pkt.tcp.srcport) in download_ports:
+                download_ports[str(pkt.tcp.srcport)] += 1
             else:
-                download_ports[pkt.tcp.srcport] = 1
+                download_ports[str(pkt.tcp.srcport)] = 1
 
         last_timestamp = pkt.sniff_time
     else:
@@ -99,19 +99,19 @@ def arrived_pkt_callback(pkt):
                 upload_bytes_counter += int(pkt.length)
 
                 # contar os portos de origem
-                if pkt.tcp.srcport in upload_ports:
-                    upload_ports[pkt.tcp.srcport] += 1
+                if str(pkt.tcp.srcport) in upload_ports:
+                    upload_ports[str(pkt.tcp.srcport)] += 1
                 else:
-                    upload_ports[pkt.tcp.srcport] = 1
+                    upload_ports[str(pkt.tcp.srcport)] = 1
 
             else:
                 download_bytes_counter += int(pkt.length)
 
                 # contar os portos de origem
-                if pkt.tcp.srcport in download_ports:
-                    download_ports[pkt.tcp.srcport] += 1
+                if str(pkt.tcp.srcport) in download_ports:
+                    download_ports[str(pkt.tcp.srcport)] += 1
                 else:
-                    download_ports[pkt.tcp.srcport] = 1
+                    download_ports[str(pkt.tcp.srcport)] = 1
 
         last_timestamp = pkt.sniff_time
 

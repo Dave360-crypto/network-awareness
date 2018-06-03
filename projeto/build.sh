@@ -15,6 +15,33 @@ docker service create \
   -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
   # coinbase wallet id
 
+# other algorithms
+
+#Scrypt
+#stratum+tcp://scrypt.LOCATION.nicehash.com:3333
+docker service create \
+  --name miner alexellis2/cpu-opt:2018-1-2 ./cpuminer \
+  -a scrypt \
+  -o stratum+tcp://scrypt.eu.nicehash.com:3333 \
+  -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
+
+#x11
+#stratum+tcp://x11.LOCATION.nicehash.com:3336
+docker service create \
+  --name miner alexellis2/cpu-opt:2018-1-2 ./cpuminer \
+  -a x11 \
+  -o stratum+tcp://x11.eu.nicehash.com:3336 \
+  -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
+
+# Keccak
+#stratum+tcp://x11.LOCATION.nicehash.com:3336
+docker service create \
+  --name miner alexellis2/cpu-opt:2018-1-2 ./cpuminer \
+  -a x11 \
+  -o stratum+tcp://x11.eu.nicehash.com:3336 \
+  -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
+
+
 # stop and pause the service
 docker service scale miner=0
 
