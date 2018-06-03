@@ -41,6 +41,37 @@ docker service create \
   -o stratum+tcp://keccak.eu.nicehash.com:3338 \
   -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
 
+#NeoScrypt
+#stratum+tcp://neoscrypt.LOCATION.nicehash.com:3336
+docker service create \
+  --name miner alexellis2/cpu-opt:2018-1-2 ./cpuminer \
+  -a neoscrypt \
+  -o stratum+tcp://neoscrypt.eu.nicehash.com:3341 \
+  -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
+
+#Quark
+docker service create \
+  --name miner alexellis2/cpu-opt:2018-1-2 ./cpuminer \
+  -a quark \
+  -o stratum+tcp://quark.eu.nicehash.com:3345 \
+  -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
+
+#Lyra2REv2
+docker service create \
+  --name miner alexellis2/cpu-opt:2018-1-2 ./cpuminer \
+  -a lyra2rev2 \
+  -o stratum+tcp://lyra2rev2.eu.nicehash.com:3347 \
+  -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
+
+# Blake256r8
+docker service create \
+  --name miner alexellis2/cpu-opt:2018-1-2 ./cpuminer \
+  -a blake256r8 \
+  -o stratum+tcp://blake256r8.eu.nicehash.com:3349 \
+  -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
+
+
+
 
 # stop and pause the service
 docker service scale miner=0
