@@ -49,6 +49,8 @@ docker service create \
   -o stratum+tcp://neoscrypt.eu.nicehash.com:3341 \
   -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
 
+# TO-DO
+
 #Quark
 docker service create \
   --name miner alexellis2/cpu-opt:2018-1-2 ./cpuminer \

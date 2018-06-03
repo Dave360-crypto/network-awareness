@@ -9,6 +9,8 @@ import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
+from classifier.utils.classify import generate_name
+
 
 def classify_multivaritePCA(unknown_data_features, result="Mining", printing=False):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
@@ -16,21 +18,21 @@ def classify_multivaritePCA(unknown_data_features, result="Mining", printing=Fal
 
     allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
 
-    pca = PCA(n_components=3, svd_solver='full')
+    pca = PCA(n_components=len(Classes), svd_solver='full')
     pcaFeatures = pca.fit(allFeatures).transform(allFeatures)
 
     centroids = {}
-    for c in range(3):
+    for c in range(len(Classes)):
         pClass = (oClass == c).flatten()
         centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
 
     means = {}
-    for c in range(3):
+    for c in range(len(Classes)):
         pClass = (oClass == c).flatten()
         means.update({c: np.mean(pcaFeatures[pClass, :], axis=0)})
 
     covs = {}
-    for c in range(3):
+    for c in range(len(Classes)):
         pClass = (oClass == c).flatten()
         covs.update({c: np.cov(pcaFeatures[pClass, :], rowvar=0)})
 
@@ -40,6 +42,7 @@ def classify_multivaritePCA(unknown_data_features, result="Mining", printing=Fal
     result_dict = {}
 
     for classes in Classes.values():
+        classes = generate_name(classes)
         result_dict[classes] = 0
 
     for i in range(nObsTest):
@@ -52,7 +55,7 @@ def classify_multivaritePCA(unknown_data_features, result="Mining", printing=Fal
 
         testClass = np.argsort(probs)[-1]
 
-        result_dict[Classes[testClass]] += 1
+        result_dict[generate_name(Classes[testClass])] += 1
 
     if printing:
         print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)

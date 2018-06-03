@@ -8,6 +8,8 @@ import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
+from classifier.utils.classify import generate_name
+
 
 def classify_vectorPCA(unknown_data_features, result="Mining", printing=False):
 
@@ -21,7 +23,7 @@ def classify_vectorPCA(unknown_data_features, result="Mining", printing=False):
 
     NormAllTestFeatures = scaler.fit_transform(unknown_data_features)
 
-    pca = PCA(n_components=3, svd_solver='full')
+    pca = PCA(n_components=len(Classes), svd_solver='full')
     NormPcaFeatures = pca.fit(NormAllFeatures).transform(NormAllFeatures)
 
     NormTestPcaFeatures = pca.fit(NormAllTestFeatures).transform(NormAllTestFeatures)
@@ -47,16 +49,19 @@ def classify_vectorPCA(unknown_data_features, result="Mining", printing=False):
     linear_svc_result = {}
 
     for classes in Classes.values():
+        classes = generate_name(classes)
+
+        # zero
         svc_result[classes] = 0
         kernel_rbf_result[classes] = 0
         kernel_poly_result[classes] = 0
         linear_svc_result[classes] = 0
 
     for i in range(nObsTest):
-        svc_result[Classes[L1[i]]] += 1
-        kernel_rbf_result[Classes[L2[i]]] += 1
-        kernel_poly_result[Classes[L3[i]]] += 1
-        linear_svc_result[Classes[L4[i]]] += 1
+        svc_result[generate_name(Classes[L1[i]])] += 1
+        kernel_rbf_result[generate_name(Classes[L2[i]])] += 1
+        kernel_poly_result[generate_name(Classes[L3[i]])] += 1
+        linear_svc_result[generate_name(Classes[L4[i]])] += 1
 
     if printing:
         print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)

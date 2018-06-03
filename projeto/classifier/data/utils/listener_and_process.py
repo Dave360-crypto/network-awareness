@@ -84,7 +84,7 @@ def arrived_pkt_callback(pkt):
 
         if delta_time >= 1:
             # if passed more than one second, means we have to write n 0
-            comm_up_down = np.append(comm_up_down, [[0, 0]], 0)
+            comm_up_down = np.append(comm_up_down, [[download_bytes_counter, upload_bytes_counter]], 0)
 
             for i in range(0, int(delta_time) - 1):
                 comm_up_down = np.append(comm_up_down, [[0, 0]], 0)

@@ -10,13 +10,15 @@ import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
+from classifier.utils.classify import generate_name
+
 
 def classify_neuronalNetworks(unknown_data_features, result="Mining", printing=False):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
         allFeatures, Classes, oClass = pickle.load(f)
 
     centroids = {}
-    for c in range(3):
+    for c in range(len(Classes)):
         pClass = (oClass == c).flatten()
         centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
 
@@ -27,7 +29,7 @@ def classify_neuronalNetworks(unknown_data_features, result="Mining", printing=F
 
     NormAllTestFeatures = scaler.fit_transform(unknown_data_features)
 
-    pca = PCA(n_components=3, svd_solver='full')
+    pca = PCA(n_components=len(Classes), svd_solver='full')
     NormPcaFeatures = pca.fit(NormAllFeatures).transform(NormAllFeatures)
 
     NormTestPcaFeatures = pca.fit(NormAllTestFeatures).transform(NormAllTestFeatures)
@@ -35,7 +37,7 @@ def classify_neuronalNetworks(unknown_data_features, result="Mining", printing=F
     result_dict = {}
 
     for classes in Classes.values():
-        result_dict[classes] = 0
+        result_dict[generate_name(classes)] = 0
 
     alpha = 1
     max_iter = 100000
@@ -46,7 +48,7 @@ def classify_neuronalNetworks(unknown_data_features, result="Mining", printing=F
     nObsTest, nFea = NormTestPcaFeatures.shape
 
     for i in range(nObsTest):
-        result_dict[Classes[LT[i]]] += 1
+        result_dict[generate_name(Classes[LT[i]])] += 1
 
     if printing:
         print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)

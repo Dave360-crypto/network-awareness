@@ -10,6 +10,8 @@ from classifier.utils.classify import distance
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
+from classifier.utils.classify import generate_name
+
 
 def classify_distances(unknown_data_features, result="Mining", printing=False):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
@@ -18,13 +20,14 @@ def classify_distances(unknown_data_features, result="Mining", printing=False):
     allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
 
     centroids = {}
-    for c in range(3):
+    for c in range(len(Classes)):
         pClass = (oClass == c).flatten()
         centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
 
     result_dict = {}
 
     for classes in Classes.values():
+        classes = generate_name(classes)
         result_dict[classes] = 0
 
     nObsTest, nFea = unknown_data_features.shape
@@ -35,7 +38,7 @@ def classify_distances(unknown_data_features, result="Mining", printing=False):
         ndists = dists / np.sum(dists)
         testClass = np.argsort(dists)[0]
 
-        result_dict[Classes[testClass]] += 1
+        result_dict[generate_name(Classes[testClass])] += 1
 
     result_dict = sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True)
 

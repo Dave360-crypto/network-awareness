@@ -8,46 +8,64 @@ from classifier.utils.classify import breakTrainTest, extractFeatures, extractFe
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
 WINDOW = 120
+SCALES = [2, 4, 8, 16, 32, 64, 128, 256]
 
-if __name__ == '__main__':
-    # classes
-    Classes = {0: 'Browsing', 1: 'HTTP', 2: 'Mining Cryptonight', 3: 'Netflix',
-               4: 'RTP Live Stream', 5: 'Spotify'}
 
-    # loading the initial files...
-    with open(DATA_PATH + "browsing_comm_record.bin", 'rb') as f:
+def make_observation_features(class_idx, file_name):
+    with open(DATA_PATH + file_name, 'rb') as f:
         comm_up_down, upload_ports, download_ports = pickle.load(f)
 
-    yt = np.loadtxt(DATA_PATH + 'youtube_download_upload_bytes.dat')
-    browsing = np.loadtxt(DATA_PATH + 'browsing_download_upload_bytes.dat')
-    mining = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
+    comm_train, comm_test = breakTrainTest(comm_up_down, oWnd=WINDOW)
 
-    # creating train and test data for each Class (YouTube, Browsing and Mining)
-    yt_train, yt_test = breakTrainTest(yt, oWnd=WINDOW)
-    browsing_train, browsing_test = breakTrainTest(browsing, oWnd=WINDOW)
-    mining_train, mining_test = breakTrainTest(mining, oWnd=WINDOW)
+    features_comm, oClass_comm = extractFeatures(comm_train, Class=class_idx)
+    features_commS, oClass_commS = extractFeaturesSilence(comm_train, Class=class_idx)
+    features_commW, oClass_commW = extractFeaturesWavelet(comm_train, SCALES, Class=class_idx)
 
-    features_yt, oClass_yt = extractFeatures(yt_train, Class=0)
-    features_browsing, oClass_browsing = extractFeatures(browsing_train, Class=1)
-    features_mining, oClass_mining = extractFeatures(mining_train, Class=2)
+    return (features_comm, oClass_comm), (features_commS, oClass_commS), (features_commW, oClass_commW)
 
-    features = np.vstack((features_yt, features_browsing, features_mining))
-    oClass = np.vstack((oClass_yt, oClass_browsing, oClass_mining))
 
-    features_ytS, oClass_yt = extractFeaturesSilence(yt_train, Class=0)
-    features_browsingS, oClass_browsing = extractFeaturesSilence(browsing_train, Class=1)
-    features_miningS, oClass_mining = extractFeaturesSilence(mining_train, Class=2)
+if __name__ == '__main__':
+    observations = [
+        "netflix_comm_record.bin",
+        "spotify_comm_record.bin",
+        "mining_cryptonight_comm_record.bin",
+        "mining_x11_comm_record.bin",
+        "mining_keccak_comm_record.bin"
+    ]
 
-    featuresS = np.vstack((features_ytS, features_browsingS, features_miningS))
-    oClass = np.vstack((oClass_yt, oClass_browsing, oClass_mining))
+    features = []
+    featuresS = []
+    featuresW = []
 
-    scales = [2, 4, 8, 16, 32, 64, 128, 256]
-    features_ytW, oClass_yt = extractFeaturesWavelet(yt_train, scales, Class=0)
-    features_browsingW, oClass_browsing = extractFeaturesWavelet(browsing_train, scales, Class=1)
-    features_miningW, oClass_mining = extractFeaturesWavelet(mining_train, scales, Class=2)
+    oClass = []
+    oClassS = []
+    oClassW = []
 
-    featuresW = np.vstack((features_ytW, features_browsingW, features_miningW))
-    oClass = np.vstack((oClass_yt, oClass_browsing, oClass_mining))
+    Classes = dict()
+
+    for idx, observation in enumerate(observations):
+        (features_comm, oClass_comm), (features_commS, oClass_commS), (features_commW, oClass_commW) = make_observation_features(idx, observation)
+
+        # save features
+        features.append(features_comm)
+        featuresS.append(features_commS)
+        featuresW.append(features_commW)
+
+        # save class
+        oClass.append(oClass_comm)
+        oClassS.append(oClass_commS)
+        oClassW.append(oClass_commW)
+
+        Classes[idx] = observation.replace("_comm_record.bin", "").replace("_", " ").capitalize()
+
+    features = np.vstack(tuple(features))
+    oClass = np.vstack(tuple(oClass))
+
+    featuresS = np.vstack(tuple(featuresS))
+    oClassS = np.vstack(tuple(oClassS))
+
+    featuresW = np.vstack(tuple(featuresW))
+    oClassW = np.vstack(tuple(oClassW))
 
     allFeatures = np.hstack((features, featuresS, featuresW))
 

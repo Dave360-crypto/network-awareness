@@ -1,9 +1,10 @@
 import numpy as np
-
+import pickle
 import sys, os
 sys.path.append("..")
 
-from classifier.utils.classify import extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData
+from classifier.utils.classify import extractFeatures, extractFeaturesWavelet, extractFeaturesSilence, breakData, \
+    generate_name_from_file
 from classifier.vector.classify_vector import classify_vector
 
 
@@ -11,11 +12,14 @@ DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "classifier
 
 
 if __name__ == '__main__':
+    file_name = "netflix_comm_record.bin"
+
     # classify unknown data
-    unknown_data = np.loadtxt(DATA_PATH + 'mining_download_upload_bytes.dat')
+    with open(DATA_PATH + file_name, 'rb') as f:
+        comm_up_down, upload_ports, download_ports = pickle.load(f)
 
     # break data
-    break_data = breakData(unknown_data)
+    break_data = breakData(comm_up_down)
 
     # extract features of the unknown break data
     features_data = extractFeatures(break_data)[0]
@@ -24,4 +28,4 @@ if __name__ == '__main__':
     unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
 
     # creating train and test data for each Class (YouTube, Browsing and Mining)
-    classify_vector(unknown_data_features, printing=True)
+    classify_vector(unknown_data_features, printing=True, result=generate_name_from_file(file_name))

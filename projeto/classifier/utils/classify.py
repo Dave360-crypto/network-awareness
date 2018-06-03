@@ -6,6 +6,19 @@ from scipy import stats
 warnings.filterwarnings('ignore')
 
 
+def generate_name(name):
+    name = name.split(" ")[0]
+
+    if name != "Mining":
+        name = "Other"
+
+    return name
+
+
+def generate_name_from_file(name):
+    return generate_name(name.replace("_comm_record.bin", "").replace("_", " ").capitalize())
+
+
 def breakTrainTest(data, oWnd=300, trainPerc=0.5):
     nSamp, nCols = data.shape
     nObs = int(nSamp / oWnd)

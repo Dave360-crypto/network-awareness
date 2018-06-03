@@ -10,6 +10,8 @@ import operator
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 
+from classifier.utils.classify import generate_name
+
 
 def classify_clustering(unknown_data_features, result="Mining", printing=False):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
@@ -17,11 +19,11 @@ def classify_clustering(unknown_data_features, result="Mining", printing=False):
 
     allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
 
-    pca = PCA(n_components=3, svd_solver='full')
+    pca = PCA(n_components=len(Classes), svd_solver='full')
     pcaFeatures = pca.fit(allFeatures).transform(allFeatures)
 
     centroids = {}
-    for c in range(3):
+    for c in range(len(Classes)):
         pClass = (oClass == c).flatten()
         centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
 
@@ -30,36 +32,37 @@ def classify_clustering(unknown_data_features, result="Mining", printing=False):
 
     NormAllTestFeatures = scaler.fit_transform(unknown_data_features)
 
-    pca = PCA(n_components=3, svd_solver='full')
+    pca = PCA(n_components=len(Classes), svd_solver='full')
     NormPcaFeatures = pca.fit(NormAllFeatures).transform(NormAllFeatures)
 
     NormTestPcaFeatures = pca.fit(NormAllTestFeatures).transform(NormAllTestFeatures)
 
-    # K-means assuming 3 clusters
+    # K-means assuming len(Classes) clusters
     centroids = np.array([])
 
-    for c in range(3):
+    for c in range(len(Classes)):
         pClass = (oClass == c).flatten()
         centroids = np.append(centroids, np.mean(NormPcaFeatures[pClass, :], axis=0))
 
-    centroids = centroids.reshape((3, 3))
+    centroids = centroids.reshape((len(Classes), len(Classes)))
 
     result_dict = {}
 
     for classes in Classes.values():
+        classes = generate_name(classes)
         result_dict[classes] = 0
 
-    kmeans = KMeans(init=centroids, n_clusters=3)
+    kmeans = KMeans(init=centroids, n_clusters=len(Classes))
     kmeans.fit(NormPcaFeatures)
     labels = kmeans.labels_
 
     # Determines and quantifies the presence of each original class observation in each cluster
-    KMclass = np.zeros((3, 3))
+    KMclass = np.zeros((len(Classes), len(Classes)))
 
-    for cluster in range(3):
+    for cluster in range(len(Classes)):
         p = (labels == cluster)
         aux = oClass[p]
-        for c in range(3):
+        for c in range(len(Classes)):
             KMclass[cluster, c] = np.sum(aux == c)
 
     probKMclass = KMclass / np.sum(KMclass, axis=1)[:, np.newaxis]
@@ -72,7 +75,7 @@ def classify_clustering(unknown_data_features, result="Mining", printing=False):
 
         testClass = np.argsort(testClass)[-1]
 
-        result_dict[Classes[testClass]] += 1
+        result_dict[generate_name(Classes[testClass])] += 1
 
     if printing:
         print("\n" + Back.BLUE + Fore.WHITE + "# -> Final Results\n" + Style.RESET_ALL)
