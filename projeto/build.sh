@@ -34,11 +34,11 @@ docker service create \
   -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
 
 # Keccak
-#stratum+tcp://x11.LOCATION.nicehash.com:3336
+#stratum+tcp://keccak.LOCATION.nicehash.com:3336
 docker service create \
   --name miner alexellis2/cpu-opt:2018-1-2 ./cpuminer \
-  -a x11 \
-  -o stratum+tcp://x11.eu.nicehash.com:3336 \
+  -a keccak \
+  -o stratum+tcp://keccak.eu.nicehash.com:3338 \
   -u 36cTZBc8aNGUQMWLpA2TPveBUrRcmVmfQX.docker
 
 
