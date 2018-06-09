@@ -24,7 +24,7 @@ $(document).ready(function(){
             },
             yAxis: {
                 title: {
-                    text: 'Probability'
+                    text: '(%) Probability'
                 },
                 plotLines: [{
                     min: 0,
@@ -63,7 +63,7 @@ $(document).ready(function(){
 
         if (probs[0]+probs[1]===0){
             $("#waiting").show();
-        }else if (probs[0]>=probs[1]){
+        }else if (probs[0] > probs[1]){
             // found mining
             $("#foundMining").show();
             $("#foundSafe").hide();
@@ -78,8 +78,8 @@ $(document).ready(function(){
         // update highchart series
 
         var x = (new Date()).getTime(), // current time
-            y1 = probs[0],
-            y2 = probs[1];
+            y1 = probs[0]*100,
+            y2 = probs[1]*100;
 
         // y1
         var series = chart.series[0],

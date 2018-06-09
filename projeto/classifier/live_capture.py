@@ -48,6 +48,8 @@ current_host_name = socket.gethostbyname(socket.gethostname())
 
 WINDOW = 120
 
+last_timestamp_classify = datetime.datetime.now()
+
 
 def thread_pyshark():
     # starting event loop
@@ -60,7 +62,7 @@ def thread_pyshark():
 
     def classify(pkt):
         global index, last_timestamp, upload_bytes_counter, download_bytes_counter, unknown_data_bytes_counter, \
-            upload_ports, download_ports, current_host_name
+            upload_ports, download_ports, current_host_name, last_timestamp_classify
 
         source = pkt["ip.src"]
 
@@ -132,37 +134,45 @@ def thread_pyshark():
         """
         When the size_bytes get's some value it will discard  old bytes and only X most recent bytes will be take in account
         """
-        if unknown_data_bytes_counter.shape[0] >= WINDOW:
-            # websocket message
-            message = [0, 0]
+        delta_time = (datetime.datetime.now() - last_timestamp_classify).total_seconds()
 
-            # 121-120: 1: =>120, 2
-            unknown_data_bytes_counter = unknown_data_bytes_counter[unknown_data_bytes_counter.shape[0]-WINDOW:, :]
+        if delta_time >= 1:
+            # if passed more than one second, means we have to write n 0
 
-            break_data = breakData(unknown_data_bytes_counter, oWnd=WINDOW)
+            if unknown_data_bytes_counter.shape[0] >= WINDOW:
+                # websocket message
+                message = [0, 0]
 
-            features_data = extractFeatures(break_data)[0]
-            features_dataS = extractFeaturesSilence(break_data)[0]
-            features_dataW = extractFeaturesWavelet(break_data)[0]
-            unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
+                # 121-120: 1: =>120, 2
+                unknown_data_bytes_counter = unknown_data_bytes_counter[unknown_data_bytes_counter.shape[0]-WINDOW:, :]
 
-            # based on distances
-            result = classify_distances(unknown_data_features, result="YouTube")
+                break_data = breakData(unknown_data_bytes_counter, oWnd=WINDOW)
 
-            sys.stdout.write("\rType: {} | Data size: {}".format(result[0][0], unknown_data_bytes_counter.shape[0]))
-            sys.stdout.flush()
+                features_data = extractFeatures(break_data)[0]
+                features_dataS = extractFeaturesSilence(break_data)[0]
+                features_dataW = extractFeaturesWavelet(break_data)[0]
+                unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
 
-            # message
-            sum_results = result[0][1] + result[1][1]
+                # based on distances
+                result = classify_distances(unknown_data_features, result="YouTube")
 
-            if sum_results > 0:
-                message = [result[1][1]/sum_results, result[0][1]/sum_results]
+                sys.stdout.write("\rType: {} | Data size: {}".format(result[0][0], unknown_data_bytes_counter.shape[0]))
+                sys.stdout.flush()
 
-            for itm in clients:
-                itm.write_message(json.dumps(message))
-        else:
-            sys.stdout.write("\rWait a moment, we are recording data... | Data size: {}".format(unknown_data_bytes_counter.shape[0]))
-            sys.stdout.flush()
+                # message
+                sum_results = result[0][1] + result[1][1]
+
+                if sum_results > 0:
+                    message = [result[1][1]/sum_results, result[0][1]/sum_results]
+
+                for itm in clients:
+                    itm.write_message(json.dumps(message))
+            else:
+                sys.stdout.write("\rWait a moment, we are recording data... | Data size: {}".format(unknown_data_bytes_counter.shape[0]))
+                sys.stdout.flush()
+
+            # change last timestamp
+            last_timestamp_classify = datetime.datetime.now()
 
     def print_callback(pkt):
         classify({
