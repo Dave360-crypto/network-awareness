@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var ws = new WebSocket("ws://127.0.0.1:1234/");
+    var ws = new WebSocket("ws://127.0.0.1:1234/ws");
     var probs;
 
 
@@ -61,14 +61,18 @@ $(document).ready(function(){
     ws.onmessage = function (event) {
         probs = JSON.parse(event.data);
 
-        if (probs[0]>=probs[1]){
+        if (probs[0]+probs[1]===0){
+            $("#waiting").show();
+        }else if (probs[0]>=probs[1]){
             // found mining
             $("#foundMining").show();
             $("#foundSafe").hide();
+            $("#waiting").hide();
         }else{
             // found safe
             $("#foundSafe").show();
             $("#foundMining").hide();
+            $("#waiting").hide();
         }
 
         // update highchart series
