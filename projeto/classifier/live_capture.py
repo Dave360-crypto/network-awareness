@@ -5,7 +5,7 @@ import datetime
 import numpy as np
 from classifier.distances.classify_distances import classify_distances
 from classifier.utils.classify import breakData, extractFeatures, extractFeaturesSilence, extractFeaturesWavelet
-
+import traceback
 # websocket
 import tornado.ioloop
 import tornado.web
@@ -153,8 +153,20 @@ def thread_pyshark():
 
                             # association with service port
                             message[port] = result
-                    except Exception:
+                    except Exception as e:
+                        pass
+                        """
                         print("Error, Port: {} Shape {}".format(port, str(service["data_bytes_counter"].shape)))
+
+                        # print traceback
+                        exc_type, exc_value, exc_traceback = sys.exc_info()
+
+                        print("*** print_tb:")
+                        traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
+
+                        print("*** print_exception:")
+                        traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
+                        """
 
             sys.stdout.write("\r{}".format(str(json.dumps(message))))
             sys.stdout.flush()
