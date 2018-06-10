@@ -1,6 +1,9 @@
 import numpy as np
-import os, sys
+import os
+import sys
 import pickle
+from os import listdir
+from os.path import isfile, join
 
 from classifier.utils.classify import breakTrainTest, extractFeatures, extractFeaturesWavelet, extractFeaturesSilence
 
@@ -25,13 +28,7 @@ def make_observation_features(class_idx, file_name):
 
 
 if __name__ == '__main__':
-    observations = [
-        "netflix_comm_record.bin",
-        "spotify_comm_record.bin",
-        "mining_cryptonight_comm_record.bin",
-        "mining_x11_comm_record.bin",
-        "mining_keccak_comm_record.bin"
-    ]
+    observations = [f for f in listdir(DATA_PATH) if isfile(join(DATA_PATH, f)) and not f.startswith(".")]
 
     features = []
     featuresS = []
@@ -44,6 +41,7 @@ if __name__ == '__main__':
     Classes = dict()
 
     for idx, observation in enumerate(observations):
+        print(observation)
         (features_comm, oClass_comm), (features_commS, oClass_commS), (features_commW, oClass_commW) = make_observation_features(idx, observation)
 
         # save features
@@ -67,7 +65,5 @@ if __name__ == '__main__':
     featuresW = np.vstack(tuple(featuresW))
     oClassW = np.vstack(tuple(oClassW))
 
-    allFeatures = np.hstack((features, featuresS, featuresW))
-
     with open(DATA_PATH + "bin/features_data.bin", 'wb') as f:
-        pickle.dump((allFeatures, Classes, oClass), f)
+        pickle.dump((features, featuresS, featuresW, Classes, oClass, oClassS, oClassW), f)

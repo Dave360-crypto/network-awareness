@@ -13,16 +13,23 @@ DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data/")
 from classifier.utils.classify import generate_name
 
 
-def classify_distances(unknown_data_features, result="Mining", printing=False):
+def classify_distances(unknown_features_data, unknown_features_dataS, unknown_features_dataW, result="Mining", printing=False):
     with open(DATA_PATH + "bin/features_data.bin", 'rb') as f:
-        allFeatures, Classes, oClass = pickle.load(f)
+        features, featuresS, featuresW, Classes, oClass, oClassS, oClassW = pickle.load(f)
 
-    allFeatures = allFeatures[:, :unknown_data_features.shape[1]]
+    # setting selected features
+    obsFeatures = featuresW
+    oClass = oClassW
+
+    unknown_data_features = unknown_features_dataW
+    # end
+
+    obsFeatures = obsFeatures[:, :unknown_data_features.shape[1]]
 
     centroids = {}
     for c in range(len(Classes)):
         pClass = (oClass == c).flatten()
-        centroids.update({c: np.mean(allFeatures[pClass, :], axis=0)})
+        centroids.update({c: np.mean(obsFeatures[pClass, :], axis=0)})
 
     result_dict = {}
 

@@ -22,25 +22,10 @@ logging.basicConfig(level=logging.INFO)
 # web socket clients connected.
 clients = []
 
-upload_bytes_counter = 0
-download_bytes_counter = 0
-
-unknown_data_bytes_counter = np.array([[0, 0]])
-
-# Ports counter (upload and download)
-
-upload_ports = {}
-download_ports = {}
-
-download_ports_counter = 0
-upload_ports_counter = 0
+# bytes_counter by tcp service
+tcp_services = dict()
 
 # [END] ports counter (upload and download)
-
-index = 0
-count = 0
-
-last_timestamp = 0
 
 current_host_name = socket.gethostbyname(socket.gethostname())
 
@@ -61,75 +46,79 @@ def thread_pyshark():
     # Bytes counter (download and upload)
 
     def classify(pkt):
-        global index, last_timestamp, upload_bytes_counter, download_bytes_counter, unknown_data_bytes_counter, \
-            upload_ports, download_ports, current_host_name, last_timestamp_classify
+        global tcp_services, current_host_name, last_timestamp_classify
+
+        # verify if the tcp service has been already registered
+        src_port = pkt["tcp.srcport"]
+        dst_port = pkt["tcp.dstport"]
+        
+        # save the port to further update the tcp services dict
+        port = dst_port
+        
+        if src_port in tcp_services.keys():
+            # the packet belongs to one tcp service session
+            service = tcp_services[src_port]
+            port = src_port
+        elif dst_port in tcp_services.keys():
+            service = tcp_services[dst_port]
+            port = dst_port
+        else:
+            # new tcp session, let's create it
+            service = {
+                "upload_bytes_counter": 0,
+                "download_bytes_counter": 0,
+                "last_timestamp": 0,
+                "index": 0,
+                "data_bytes_counter": np.array([[0, 0]])
+            }
+
+        # end verify
 
         source = pkt["ip.src"]
 
-        if index == 0:
+        if service["index"] == 0:
             if source == current_host_name:
-                upload_bytes_counter += int(pkt["length"])
-
-                # contar os portos de origem
-                if pkt["tcp.srcport"] in upload_ports:
-                    upload_ports[pkt["tcp.srcport"]] += 1
-                else:
-                    upload_ports[pkt["tcp.srcport"]] = 1
-
+                service["upload_bytes_counter"] += int(pkt["length"])
             else:
-                download_bytes_counter += int(pkt["length"])
+                service["download_bytes_counter"] += int(pkt["length"])
 
-                # contar os portos de origem
-                if pkt["tcp.srcport"] in download_ports:
-                    download_ports[pkt["tcp.srcport"]] += 1
-                else:
-                    download_ports[pkt["tcp.srcport"]] = 1
-
-            last_timestamp = pkt["sniff_time"]
+            service["last_timestamp"] = pkt["sniff_time"]
         else:
             # index != 0
             timestamp_now = pkt["sniff_time"]
             timestamp_now = timestamp_now.replace(tzinfo=datetime.timezone.utc).timestamp()
 
-            delta_time = ((datetime.datetime.utcfromtimestamp(int(timestamp_now))) - last_timestamp).total_seconds()
+            delta_time = ((datetime.datetime.utcfromtimestamp(int(timestamp_now))) - service["last_timestamp"]).total_seconds()
 
             if delta_time >= 1:  # if passed more than one second, means we have to write n 0
-                unknown_data_bytes_counter = np.append(unknown_data_bytes_counter, [[download_bytes_counter,
-                                                                                     upload_bytes_counter]], 0)
+                service["data_bytes_counter"] = np.append(service["data_bytes_counter"],
+                                                          [[service["download_bytes_counter"],
+                                                            service["upload_bytes_counter"]]], 0)
 
                 for i in range(0, int(delta_time) - 1):
-                    unknown_data_bytes_counter = np.append(unknown_data_bytes_counter, [[0, 0]], 0)
+                    service["data_bytes_counter"] = np.append(service["data_bytes_counter"], [[0, 0]], 0)
 
-                upload_bytes_counter = 0
-                download_bytes_counter = 0
+                service["upload_bytes_counter"] = 0
+                service["download_bytes_counter"] = 0
 
-            elif int(last_timestamp.replace(tzinfo=datetime.timezone.utc).timestamp()) == int(
+            elif int(service["last_timestamp"].replace(tzinfo=datetime.timezone.utc).timestamp()) == int(
                     timestamp_now):  # if it's the same timestamp, we have to increment
                 source = pkt["ip.src"]
 
                 if source == current_host_name:
-                    upload_bytes_counter += int(pkt["length"])
-
-                    # contar os portos de origem
-                    if pkt["tcp.srcport"] in upload_ports:
-                        upload_ports[pkt["tcp.srcport"]] += 1
-                    else:
-                        upload_ports[pkt["tcp.srcport"]] = 1
+                    service["upload_bytes_counter"] += int(pkt["length"])
 
                 else:
-                    download_bytes_counter += int(pkt["length"])
+                    service["download_bytes_counter"] += int(pkt["length"])
 
-                    # contar os portos de origem
-                    if pkt["tcp.srcport"] in download_ports:
-                        download_ports[pkt["tcp.srcport"]] += 1
-                    else:
-                        download_ports[pkt["tcp.srcport"]] = 1
-
-            last_timestamp = pkt["sniff_time"]
+            service["last_timestamp"] = pkt["sniff_time"]
 
         # ack and inc index
 
-        index += 1
+        service["index"] += 1
+
+        # update tcp services
+        tcp_services[port] = service
 
         """
         When the size_bytes get's some value it will discard  old bytes and only X most recent bytes will be take in account
@@ -138,38 +127,40 @@ def thread_pyshark():
 
         if delta_time >= 1:
             # if passed more than one second, means we have to write n 0
+            message = {}
 
-            if unknown_data_bytes_counter.shape[0] >= WINDOW:
-                # websocket message
-                message = [0, 0]
+            for port, service in tcp_services.items():
+                if service["data_bytes_counter"].shape[0] >= WINDOW:
+                    try:
+                        # 121-120: 1: =>120, 2
+                        data_bytes_counter = service["data_bytes_counter"][service["data_bytes_counter"].shape[0]-WINDOW:, :]
 
-                # 121-120: 1: =>120, 2
-                unknown_data_bytes_counter = unknown_data_bytes_counter[unknown_data_bytes_counter.shape[0]-WINDOW:, :]
+                        break_data = breakData(data_bytes_counter, oWnd=WINDOW)
 
-                break_data = breakData(unknown_data_bytes_counter, oWnd=WINDOW)
+                        features_data = extractFeatures(break_data)[0]
+                        features_dataS = extractFeaturesSilence(break_data)[0]
+                        features_dataW = extractFeaturesWavelet(break_data)[0]
 
-                features_data = extractFeatures(break_data)[0]
-                features_dataS = extractFeaturesSilence(break_data)[0]
-                features_dataW = extractFeaturesWavelet(break_data)[0]
-                unknown_data_features = np.hstack((features_data, features_dataS, features_dataW))
+                        # based on distances
+                        result = dict(classify_distances(features_data, features_dataS, features_dataW, result="YouTube"))
 
-                # based on distances
-                result = classify_distances(unknown_data_features, result="YouTube")
+                        # message
+                        sum_results = result["Other"] + result["Mining"]
 
-                sys.stdout.write("\rType: {} | Data size: {}".format(result[0][0], unknown_data_bytes_counter.shape[0]))
-                sys.stdout.flush()
+                        if sum_results > 0:
+                            result["Other"] = (result["Other"] / sum_results) * 100
+                            result["Mining"] = (result["Mining"] / sum_results) * 100
 
-                # message
-                sum_results = result[0][1] + result[1][1]
+                            # association with service port
+                            message[port] = result
+                    except Exception:
+                        print("Error, Port: {} Shape {}".format(port, str(service["data_bytes_counter"].shape)))
 
-                if sum_results > 0:
-                    message = [result[1][1]/sum_results, result[0][1]/sum_results]
+            sys.stdout.write("\r{}".format(str(json.dumps(message))))
+            sys.stdout.flush()
 
-                for itm in clients:
-                    itm.write_message(json.dumps(message))
-            else:
-                sys.stdout.write("\rWait a moment, we are recording data... | Data size: {}".format(unknown_data_bytes_counter.shape[0]))
-                sys.stdout.flush()
+            for itm in clients:
+                itm.write_message(json.dumps(message))
 
             # change last timestamp
             last_timestamp_classify = datetime.datetime.now()
