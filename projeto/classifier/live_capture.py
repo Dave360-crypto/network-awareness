@@ -14,6 +14,10 @@ from threading import Thread
 import logging
 import json
 import asyncio
+import pickle
+import os
+
+DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "classifier/data/")
 
 # logging
 logging.basicConfig(level=logging.INFO)
@@ -167,9 +171,10 @@ def thread_pyshark():
                         print("*** print_exception:")
                         traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2, file=sys.stdout)
                         """
+                else:
+                    message[port] = "Not enough data ({})".format(service["data_bytes_counter"].shape[0])
 
-            sys.stdout.write("\r{}".format(str(json.dumps(message))))
-            sys.stdout.flush()
+            print("\r{}".format(str(json.dumps(message, sort_keys=True, indent=4))))
 
             for itm in clients:
                 itm.write_message(json.dumps(message))
@@ -188,10 +193,6 @@ def thread_pyshark():
 
     # capture the packets
     capture.apply_on_packets(print_callback)
-
-    # capture stopped
-    sys.stdout.write("\rEnded!")
-    sys.stdout.flush()
 
 
 class SocketHandler(tornado.websocket.WebSocketHandler):
@@ -225,27 +226,30 @@ def stopTornado():
 
 
 if __name__ == '__main__':
-    logging.info('Starting thread PyShark')
-
-    threadPyShark = Thread(target=thread_pyshark)
-    threadPyShark.start()
-
-    logging.info('Starting thread Tornado')
-
-    threadTornado = Thread(target=startTornado)
-    threadTornado.start()
-
     try:
-        input("Server ready. Press enter to stop\n")
-    except SyntaxError:
-        pass
+        logging.info('Starting thread PyShark')
 
-    logging.info('Disconnecting from PyShark..')
-    logging.info('Disconnected from PyShark..')
+        threadPyShark = Thread(target=thread_pyshark)
+        threadPyShark.start()
 
-    stopTornado()
+        logging.info('Starting thread Tornado')
 
-    logging.info('See you...')
-    exit(1)
+        threadTornado = Thread(target=startTornado)
+        threadTornado.start()
 
+        try:
+            input("Server ready. Press enter to stop\n")
+        except SyntaxError:
+            pass
+    except KeyboardInterrupt:
+        print("If you want you can record this session for input.")
 
+        ports = input("Which ports do you want to select (answer with CSV)?\n {}: ".format(list(tcp_services.keys())))
+
+        ports = ports.replace(" ", "").split(",")
+
+        for port in ports:
+            prefix = input("\nPrefix name for the capture (port: {})?".format(port))
+
+            with open(DATA_PATH + prefix + "_" + port + "_comm_record.bin", 'wb') as f:
+                pickle.dump((tcp_services[port]["data_bytes_counter"]), f)

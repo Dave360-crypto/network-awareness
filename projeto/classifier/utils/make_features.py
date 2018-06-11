@@ -15,8 +15,12 @@ SCALES = [2, 4, 8, 16, 32, 64, 128, 256]
 
 
 def make_observation_features(class_idx, file_name):
-    with open(DATA_PATH + file_name, 'rb') as f:
-        comm_up_down, upload_ports, download_ports = pickle.load(f)
+    try:
+        with open(DATA_PATH + file_name, 'rb') as f:
+            comm_up_down, upload_ports, download_ports = pickle.load(f)
+    except Exception:
+        with open(DATA_PATH + file_name, 'rb') as f:
+            comm_up_down = pickle.load(f)
 
     comm_train, comm_test = breakTrainTest(comm_up_down, oWnd=WINDOW)
 
