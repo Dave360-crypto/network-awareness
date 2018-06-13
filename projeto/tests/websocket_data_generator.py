@@ -14,22 +14,24 @@ if __name__ == '__main__':
         global count
 
         while True:
-            max_int = 100
-            min_int = 0
+            data = {
+                "443": "Not enough data (118)",
+                "49180": "Not enough data (1)",
+                "50641": "Not enough data (1)",
+                "50646": {
+                    "Mining": 80.0,
+                    "Other": 20.0
+                },
+                "57377": "Not enough data (1)",
+                "61578": "Not enough data (1)",
+                "80": {
+                    "Mining": 50.0,
+                    "Other": 50.0
+                },
+                "993": "Not enough data (1)"
+            }
 
-            if count < 10:
-                max_int = 40
-                min_int = 0
-            elif 10 <= count < 20:
-                max_int = 100
-                min_int = 60
-            else:
-                count = 0
-
-            others = random.randint(min_int, max_int)
-            mining = 100 - others
-
-            await websocket.send(json.dumps([mining, others]))
+            await websocket.send(json.dumps(data))
 
             time.sleep(1)
             count += 1

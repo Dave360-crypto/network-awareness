@@ -125,6 +125,30 @@ def thread_pyshark():
         tcp_services[port] = service
 
         """
+        Update the empty seconds for each tcp service that didn't receive any byte
+        """
+        for port in tcp_services.keys():
+            service = tcp_services[port]
+
+            timestamp_now = pkt["sniff_time"]
+            timestamp_now = timestamp_now.replace(tzinfo=datetime.timezone.utc).timestamp()
+
+            delta_time = ((datetime.datetime.utcfromtimestamp(int(timestamp_now))) - service["last_timestamp"]).total_seconds()
+
+            if delta_time >= 3:  # if passed more than one second, means we have to write n 0
+                service["data_bytes_counter"] = np.append(service["data_bytes_counter"],
+                                                          [[service["download_bytes_counter"],
+                                                            service["upload_bytes_counter"]]], 0)
+
+                for i in range(0, int(delta_time) - 1):
+                    service["data_bytes_counter"] = np.append(service["data_bytes_counter"], [[0, 0]], 0)
+
+                service["upload_bytes_counter"] = 0
+                service["download_bytes_counter"] = 0
+                service["last_timestamp"] = pkt["sniff_time"]
+
+            tcp_services[port] = service
+        """
         When the size_bytes get's some value it will discard  old bytes and only X most recent bytes will be take in account
         """
         delta_time = (datetime.datetime.now() - last_timestamp_classify).total_seconds()
@@ -135,6 +159,7 @@ def thread_pyshark():
 
             for port, service in tcp_services.items():
                 if service["data_bytes_counter"].shape[0] >= WINDOW:
+
                     try:
                         # 121-120: 1: =>120, 2
                         data_bytes_counter = service["data_bytes_counter"][service["data_bytes_counter"].shape[0]-WINDOW:, :]
@@ -158,7 +183,7 @@ def thread_pyshark():
                             # association with service port
                             message[port] = result
                     except Exception as e:
-                        pass
+                        message[port] = "Window size with only zeros ({})".format(service["data_bytes_counter"].shape[0])
                         """
                         print("Error, Port: {} Shape {}".format(port, str(service["data_bytes_counter"].shape)))
 
@@ -246,7 +271,10 @@ if __name__ == '__main__':
 
         ports = input("Which ports do you want to select (answer with CSV)?\n {}: ".format(list(tcp_services.keys())))
 
-        ports = ports.replace(" ", "").split(",")
+        if ports == "all":
+            ports = list(tcp_services.keys())
+        else:
+            ports = ports.replace(" ", "").split(",")
 
         for port in ports:
             prefix = input("\nPrefix name for the capture (port: {})?".format(port))

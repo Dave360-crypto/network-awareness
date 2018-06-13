@@ -24,7 +24,7 @@ $(document).ready(function(){
             },
             yAxis: {
                 title: {
-                    text: '(%) Probability'
+                    text: '(%) Probability of being Mining'
                 },
                 plotLines: [{
                     min: 0,
@@ -44,55 +44,74 @@ $(document).ready(function(){
             exporting: {
                 enabled: false
             },
-            series: [
-                {
-                    name: 'Mining',
-                    color: '#FF4A55',
-                    data: []
-                },
-                {
-                    name: 'Others',
-                    color: '#87CB16',
-                    data: []
-                }
-            ]
+            series: []
         });
+
+
+    var shift = false;
 
     ws.onmessage = function (event) {
         probs = JSON.parse(event.data);
 
-        if (probs[0]+probs[1]===0){
+        var safe = true;
+        var waiting = true;
+
+        for (var port in probs) {
+            if (probs.hasOwnProperty(port)) {
+                if(port==="0" || port===0){
+                    return;
+                }
+
+                // if has enough data
+                var found = false;
+                var i=0;
+
+                for(; i<chart.series.length; i++){
+                    if(chart.series[i]["name"]===port){
+                        found = true;
+                        break;
+                    }
+                }
+
+                var prob = 0;
+
+                if(!found){
+                    chart.addSeries({
+                        name: port,
+                        data: []
+                    });
+                }
+
+                if(probs[port].hasOwnProperty("Mining")){
+                    // se não encontrou e tem mining, adicionar
+                    prob = probs[port]["Mining"];
+                    waiting = false;
+                }else{
+                    // se não encontrou e não tem mining, stand
+                    prob = 0;
+                }
+
+                shift = (shift || (chart.series[i].data.length > 20)); // shift if the series is longer than 20
+
+                chart.series[i].addPoint([(new Date()).getTime(), prob], true, shift);
+
+                safe = (safe && (prob<=50));
+            }
+        }
+
+        if(waiting){
             $("#waiting").show();
-        }else if (probs[0] > probs[1]){
-            // found mining
-            $("#foundMining").show();
-            $("#foundSafe").hide();
-            $("#waiting").hide();
-        }else{
+        }else if(safe){
             // found safe
             $("#foundSafe").show();
             $("#foundMining").hide();
             $("#waiting").hide();
+        }else if(!safe){
+            // found mining
+            $("#foundMining").show();
+            $("#foundSafe").hide();
+            $("#waiting").hide();
         }
-
-        // update highchart series
-
-        var x = (new Date()).getTime(), // current time
-            y1 = probs[0]*100,
-            y2 = probs[1]*100;
-
-        // y1
-        var series = chart.series[0],
-            shift = series.data.length > 20; // shift if the series is
-                                             // longer than 20
-
-        chart.series[0].addPoint([x, y1], true, shift);
-
-        // y2
-        series = chart.series[1];
-        shift = series.data.length > 20; // shift if the series is
-                                             // longer than 20
-        chart.series[1].addPoint([x, y2], true, shift);
     };
 
 });

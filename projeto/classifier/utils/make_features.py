@@ -45,20 +45,23 @@ if __name__ == '__main__':
     Classes = dict()
 
     for idx, observation in enumerate(observations):
-        print(observation)
         (features_comm, oClass_comm), (features_commS, oClass_commS), (features_commW, oClass_commW) = make_observation_features(idx, observation)
 
-        # save features
-        features.append(features_comm)
-        featuresS.append(features_commS)
-        featuresW.append(features_commW)
+        if len(features_comm) != 0:
+            print(observation)
+            # save features
+            features.append(features_comm)
+            featuresS.append(features_commS)
+            featuresW.append(features_commW)
 
-        # save class
-        oClass.append(oClass_comm)
-        oClassS.append(oClass_commS)
-        oClassW.append(oClass_commW)
+            # save class
+            oClass.append(oClass_comm)
+            oClassS.append(oClass_commS)
+            oClassW.append(oClass_commW)
 
-        Classes[idx] = observation.replace("_comm_record.bin", "").replace("_", " ").capitalize()
+            Classes[idx] = observation.replace("_comm_record.bin", "").replace("_", " ").capitalize()
+        else:
+            print("## Ignored: {}".format(observation))
 
     features = np.vstack(tuple(features))
     oClass = np.vstack(tuple(oClass))
