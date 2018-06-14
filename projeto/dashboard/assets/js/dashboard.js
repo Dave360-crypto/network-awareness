@@ -50,6 +50,8 @@ $(document).ready(function(){
 
     var shift = false;
 
+    var over_time = {};
+
     ws.onmessage = function (event) {
         probs = JSON.parse(event.data);
 
@@ -96,8 +98,47 @@ $(document).ready(function(){
                 chart.series[i].addPoint([(new Date()).getTime(), prob], true, shift);
 
                 safe = (safe && (prob<=50));
+
+                // aggregating
+                if(over_time.hasOwnProperty(port)){
+                    over_time[port] = {
+                        "mining": over_time[port]["mining"] + prob,
+                        "other": over_time[port]["other"] + (100-prob),
+                        "all": over_time[port]["all"] + 100,
+                        "percentage": over_time[port]["percentage"]
+                    }
+                }else{
+                    over_time[port] = {
+                        "mining": prob,
+                        "other": 100-prob,
+                        "all": 100,
+                        "percentage": 0
+                    }
+
+                    $("#over_time_class").append("<div class=\"col-lg-2 text-center\"><strong>"+port+"</strong></div>\n" +
+                        "                                    <div class=\"col-lg-10\">\n" +
+                        "                                        <div class=\"progress\">\n" +
+                        "                                          <div class=\"progress-bar\" rel=\"progress_bar_port_"+port+"\" role=\"progressbar\" style=\"width: 0%\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>\n" +
+                        "                                        </div>\n" +
+                        "                                    </div>");
+                }
+
+                over_time[port]["percentage"] = over_time[port]["mining"] / over_time[port]["all"] * 100;
+
+                $("div[rel='progress_bar_port_"+port+"']").attr('aria-valuenow', over_time[port]["percentage"]);
+                $("div[rel='progress_bar_port_"+port+"']").css('width', over_time[port]["percentage"] + "%");
             }
         }
+
+        /* update over time classification */
+        for (var port_prob in probs) {
+            if (probs.hasOwnProperty(port_prob)) {
+
+            }
+        }
+        /* end */
+
+
 
         if(waiting){
             $("#waiting").show();
