@@ -41,8 +41,9 @@ def classify_distances(unknown_features_data, unknown_features_dataS, unknown_fe
 
     for i in range(nObsTest):
         x = unknown_data_features[i]
-        dists = [distance(x, centroids[0]), distance(x, centroids[1]), distance(x, centroids[2])]
-        ndists = dists / np.sum(dists)
+        # dists = [distance(x, centroids[0]), distance(x, centroids[1]), distance(x, centroids[2])]
+        dists = [distance(x, centroids[y]) for y in centroids.keys()]
+        # ndists = dists / np.sum(dists)
         testClass = np.argsort(dists)[0]
 
         result_dict[generate_name(Classes[testClass])] += 1

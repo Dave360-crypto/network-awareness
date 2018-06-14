@@ -9,8 +9,10 @@ warnings.filterwarnings('ignore')
 def generate_name(name):
     name = name.split(" ")[0]
 
-    if name != "Mining":
+    if not name.startswith("Mining"):
         name = "Other"
+    else:
+        name = "Mining"
 
     return name
 
