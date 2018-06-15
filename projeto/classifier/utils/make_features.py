@@ -44,6 +44,8 @@ if __name__ == '__main__':
 
     Classes = dict()
 
+    featuresClassPosW = []
+
     for idx, observation in enumerate(observations):
         (features_comm, oClass_comm), (features_commS, oClass_commS), (features_commW, oClass_commW) = make_observation_features(idx, observation)
 
@@ -60,6 +62,11 @@ if __name__ == '__main__':
             oClassW.append(oClass_commW)
 
             Classes[idx] = observation.replace("_comm_record.bin", "").replace("_", " ").capitalize()
+
+            # append class info
+            for i in range(0, len(features_commW)):
+                featuresClassPosW.append(idx)
+
         else:
             print("## Ignored: {}".format(observation))
 

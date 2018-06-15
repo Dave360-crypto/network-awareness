@@ -26,11 +26,6 @@ def classify_distances(unknown_features_data, unknown_features_dataS, unknown_fe
 
     obsFeatures = obsFeatures[:, :unknown_data_features.shape[1]]
 
-    centroids = {}
-    for c in range(len(Classes)):
-        pClass = (oClass == c).flatten()
-        centroids.update({c: np.mean(obsFeatures[pClass, :], axis=0)})
-
     result_dict = {}
 
     for classes in Classes.values():
@@ -42,11 +37,11 @@ def classify_distances(unknown_features_data, unknown_features_dataS, unknown_fe
     for i in range(nObsTest):
         x = unknown_data_features[i]
         # dists = [distance(x, centroids[0]), distance(x, centroids[1]), distance(x, centroids[2])]
-        dists = [distance(x, centroids[y]) for y in centroids.keys()]
+        dists = [distance(x, y) for y in obsFeatures]
         # ndists = dists / np.sum(dists)
         testClass = np.argsort(dists)[0]
 
-        result_dict[generate_name(Classes[testClass])] += 1
+        result_dict[generate_name(Classes[int(oClassW[testClass][0])])] += 1
 
     result_dict = sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True)
 
