@@ -36,12 +36,26 @@ def classify_distances(unknown_features_data, unknown_features_dataS, unknown_fe
 
     for i in range(nObsTest):
         x = unknown_data_features[i]
-        # dists = [distance(x, centroids[0]), distance(x, centroids[1]), distance(x, centroids[2])]
-        dists = [distance(x, y) for y in obsFeatures]
-        # ndists = dists / np.sum(dists)
-        testClass = np.argsort(dists)[0]
 
-        result_dict[generate_name(Classes[int(oClassW[testClass][0])])] += 1
+        # calculate distances from y to x
+        dists = [distance(x, y) for y in obsFeatures]
+
+        # sum all the distances
+        sum_dists = np.sum(dists)
+
+        group_dists = {}
+
+        for classes in Classes.values():
+            classes = generate_name(classes)
+            group_dists[classes] = 0
+
+        # iterate over the distances
+        for class_i, dist in enumerate(dists):
+            class_group = generate_name(Classes[int(oClassW[class_i][0])])
+            group_dists[class_group] += dist / sum_dists
+
+        result_dict[sorted(group_dists.items(), key=operator.itemgetter(1))[0][0]] += sorted(group_dists.items(), key=operator.itemgetter(1))[0][1]
+        result_dict[sorted(group_dists.items(), key=operator.itemgetter(1))[1][0]] += sorted(group_dists.items(), key=operator.itemgetter(1))[1][1]
 
     result_dict = sorted(result_dict.items(), key=operator.itemgetter(1), reverse=True)
 

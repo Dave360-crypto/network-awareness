@@ -34,7 +34,6 @@ def arrived_pkt_callback(pkt):
     dst_port = pkt.tcp.dstport
 
     # save the port to further update the tcp services dict
-    port = dst_port
 
     if src_port in tcp_services.keys():
         # the packet belongs to one tcp service session
@@ -44,6 +43,7 @@ def arrived_pkt_callback(pkt):
         service = tcp_services[dst_port]
         port = dst_port
     else:
+        port = dst_port
         # new tcp session, let's create it
         service = {
             "upload_bytes_counter": 0,
