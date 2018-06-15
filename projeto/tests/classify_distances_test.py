@@ -15,13 +15,12 @@ from classifier.distances.classify_distances import classify_distances
 
 DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "classifier/data/")
 
-
 if __name__ == '__main__':
     observations = [f for f in listdir(DATA_PATH) if isfile(join(DATA_PATH, f)) and not f.startswith(".")]
 
     for file_name in observations:
-        print("\nExpected result:")
-        print(generate_name_from_file(file_name))
+        print("\n")
+        print("filename: ", file_name, " Expected result:", generate_name_from_file(file_name))
         # classify unknown data
         # file_name = "mining_cryptonight_comm_record.bin"
 
