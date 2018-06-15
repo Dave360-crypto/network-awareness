@@ -201,8 +201,12 @@ def thread_pyshark():
 
             print("\r{}".format(str(json.dumps(message, sort_keys=True, indent=4))))
 
+            send_message = dict()
+            send_message["ports"] = message
+            send_message["host"] = current_host_name
+
             for itm in clients:
-                itm.write_message(json.dumps(message))
+                itm.write_message(json.dumps(send_message))
 
             # change last timestamp
             last_timestamp_classify = datetime.datetime.now()

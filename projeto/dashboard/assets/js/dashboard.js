@@ -55,6 +55,12 @@ $(document).ready(function(){
     ws.onmessage = function (event) {
         probs = JSON.parse(event.data);
 
+        if(probs.hasOwnProperty("host")){
+            $("#host").html(probs["host"]);
+        }
+
+        probs = probs["ports"];
+
         var safe = true;
         var waiting = true;
 
