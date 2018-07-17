@@ -35,4 +35,10 @@ Plus, the listen_and_process.py generates new datasets in case of need.
 
 
 # Results
+
+<p align="center">
+  <img src="https://media.giphy.com/media/cArliGgSoOx1Dyvknx/giphy.gif" border="0" /></a>
+</p>
+
+
 Using the distance classifier we obtained > 75% of detection and only 13% of false positives and 0% of false negatives.
