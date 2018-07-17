@@ -1,5 +1,0 @@
-pyshark
-colorama
-pika
-websockets
-tornado
